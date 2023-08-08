@@ -1,0 +1,90 @@
+# Gradle files
+.gradle/
+/build/
+
+# Local configuration files
+local.properties
+
+# Gradle wrapper files
+gradlew
+gradlew.bat
+gradle/wrapper/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+
+# Android Studio files
+*.log
+*.potx
+.idea/
+*.ipr
+*.iws
+*.iml
+.idea_modules/
+
+# Compiled Kotlin files
+*.class
+
+# Compiled Java files
+*.class
+
+# Compiled XML files
+*.ap_
+
+# Compiled Gradle files
+.gradle/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# macOS hidden files
+.DS_Store
+
+# Windows thumbnail cache files
+Thumbs.db
+
+# Android build output
+build/
+
+# Bazel
+bazel-*/
+
+# Flutter/Dart/Pub related files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# VS Code settings
+.vscode/
+
+# Android Studio Emulator
+.emulator_console_auth_token
+
+# IntelliJ IDEA
+.idea/
+
+# Gradle files
+*.log
+*.log.*
+
+# Android Studio
+*.iml
+.idea/
+.gradle/
+local.properties
+
+# Generated files
+bin/
+gen/
+out/
+
+# Excluded folders
+node_modules/
+build/
