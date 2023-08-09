@@ -24,6 +24,11 @@ enum class NavRoutes(
         Icons.TwoTone.Person,
         "User List",
         navOnClick = { navController -> navController.navigate(USER_LIST.screenName) }),
+    USER(
+        Icons.TwoTone.Person,
+        "You",
+        navOnClick = { navController -> navController.navigate(USER.screenName) }
+    ),
     NEW_USER(
         Icons.TwoTone.Face,
         "New User",

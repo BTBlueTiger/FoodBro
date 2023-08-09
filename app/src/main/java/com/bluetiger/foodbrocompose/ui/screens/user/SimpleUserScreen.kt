@@ -1,5 +1,4 @@
-package com.bluetiger.foodbrocompose.ui.screens.new_user
-
+package com.bluetiger.foodbrocompose.ui.screens.user
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -19,55 +18,117 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.bluetiger.foodbrocompose.Graph
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.database.user.PersonDataValueType
-import com.bluetiger.foodbrocompose.ui.common.headline.HeadLine
+import com.bluetiger.foodbrocompose.database.user.User
+import com.bluetiger.foodbrocompose.database.user.UserStore
 import com.bluetiger.foodbrocompose.ui.common.selection.Selection
 import com.bluetiger.foodbrocompose.ui.common.selection.SelectionGroupMultiSelect
 import com.bluetiger.foodbrocompose.ui.common.stateable.StateAble
+import com.bluetiger.foodbrocompose.utility.toLocalDate
 import kotlinx.coroutines.launch
 
-private val model = NewUserViewModel()
+private class SimpleUserViewModel(
+    private val userStore: UserStore = Graph.userStore
+) : ViewModel() {
+
+    fun onCreateNewUserClicked() {
+
+        viewModelScope.launch {
+            userStore.getUserByEmail(getValue(PersonDataValueType.EMAIL)).collect{
+                if(it == null){
+                    userStore.addUser(User(
+                        email = getValue(PersonDataValueType.EMAIL),
+                        height = getValue(PersonDataValueType.HEIGHT).toInt(),
+                        weight = getValue(PersonDataValueType.WEIGHT).toInt(),
+                        birthday = getValue(PersonDataValueType.BIRTHDAY).toLong(),
+                        gender = getValue(PersonDataValueType.GENDER)
+                    ))
+                } else {
+                    Log.e("User", it.toString())
+                }
+            }
+        }
+    }
+
+    fun mapToUser() = User(
+        email = person.getValue(PersonDataValueType.EMAIL).getValue(),
+        height = person.getValue(PersonDataValueType.HEIGHT).getValue().toInt(),
+        weight = person.getValue(PersonDataValueType.WEIGHT).getValue().toInt(),
+        birthday = person.getValue(PersonDataValueType.BIRTHDAY).getValue().toLong(),
+        gender = person.getValue(PersonDataValueType.GENDER).getValue()
+    )
+
+    fun userToMap(user: User) {
+        setValue(PersonDataValueType.EMAIL, user.email)
+        setValue(PersonDataValueType.HEIGHT, user.height.toString())
+        setValue(PersonDataValueType.WEIGHT, user.weight.toString())
+        setValue(PersonDataValueType.BIRTHDAY, user.birthday.toString())
+        setValue(PersonDataValueType.GENDER, user.gender)
+    }
+
+    val person = mutableStateMapOf(
+        Pair(PersonDataValueType.EMAIL, StateAble.Model("", StateAble.State.DEFAULT)),
+        Pair(PersonDataValueType.HEIGHT, StateAble.Model("", StateAble.State.DEFAULT)),
+        Pair(PersonDataValueType.WEIGHT, StateAble.Model("", StateAble.State.DEFAULT)),
+        Pair(PersonDataValueType.BIRTHDAY, StateAble.Model("", StateAble.State.DEFAULT)),
+        Pair(PersonDataValueType.GENDER, StateAble.Model("", StateAble.State.DEFAULT))
+    )
+
+    fun setValue(valueType: PersonDataValueType, value: String) {
+        person[valueType]?.setValue(value)
+        if(value.isEmpty()){
+            setState(valueType, StateAble.State.DEFAULT)
+        } else {
+            setState(valueType, StateAble.State.FILLED)
+        }
+    }
+
+    fun setState(valueType: PersonDataValueType, state: StateAble.State) {
+        person[valueType]?.setState(state)
+    }
+    fun getValue(valueType: PersonDataValueType): String = person[valueType]?.getValue() ?: ""
+    fun getState(valueType: PersonDataValueType): StateAble.State =
+        person[valueType]?.getState() ?: StateAble.State.DEFAULT
+}
+
+private val model = SimpleUserViewModel()
 
 @Composable
-fun NewUserUser() {
+private fun SimpleDivider() {
+    Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
+}
+
+@Composable
+fun SimpleUserScreen(
+    user: User = User.DEMO,
+    floatingButtonText: String = "",
+    onFloatingButtonClicked: (User) -> Unit
+) {
+
+    if(user != User.DEMO){
+        model.userToMap(user)
+    } else {
+        model.person.values.forEach { it.setValue("") }
+    }
 
     val snackBarHostState = SnackbarHostState()
-    val scope = rememberCoroutineScope()
 
-
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+    Scaffold (snackbarHost = { SnackbarHost(snackBarHostState) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(20.dp),
-                onClick = {
-                    model.onCreateNewUserClicked()
-                    val list = mutableListOf<String>()
-                    model.person.forEach {
-                        if (it.value.errorIfState(StateAble.State.DEFAULT) || it.value.isError()) {
-                            list.add(it.key.label)
-                        }
-                    }
-                    val message = StringBuilder()
-                    // No Error Field in List
-                    if (list.isEmpty()) {
-
-                    } else if (list.size >= 2) {
-                        list.joinTo(buffer = message, ",", "", " is missing!")
-                    } else {
-                        message.append("${list[0]} is missing!")
-                    }
-                    scope.launch {
-                        snackBarHostState.showSnackbar(message.toString())
-                    }
-                }
-            ) { Text("Create New User") }
+                onClick = { onFloatingButtonClicked(model.mapToUser()) }
+            ) { Text(floatingButtonText) }
         },
         content = { innerPadding ->
             Box(
@@ -75,26 +136,14 @@ fun NewUserUser() {
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                NewUserContent()
+                UserContent()
             }
         }
     )
 }
 
 @Composable
-private fun BasicPersonalInformation() {
-    HeadLine(headline = "PersonalInformation")
-
-}
-
-@Composable
-private fun SimpleDivider() {
-    Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
-}
-
-
-@Composable
-fun NewUserContent() {
+fun UserContent() {
 
     Column(Modifier.padding(15.dp)) {
 
@@ -128,7 +177,6 @@ fun IconWithRows(
         }
     }
 }
-
 @Composable
 fun PersonalInformation() {
 

@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.ui.screens.users_list
+package com.bluetiger.foodbrocompose.ui.screens.user.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,10 +8,9 @@ import com.bluetiger.foodbrocompose.database.user.User
 import com.bluetiger.foodbrocompose.database.user.UserStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class UsersScreenViewModel(
+class UsersListScreenViewModel(
     private val userStore: UserStore = Graph.userStore
 ) : ViewModel() {
 

@@ -1,6 +1,5 @@
 package com.bluetiger.foodbrocompose.ui.screens.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,11 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.bluetiger.foodbrocompose.Graph
-import com.bluetiger.foodbrocompose.database.user.User
-import com.bluetiger.foodbrocompose.ui.common.headline.HeadLine
-import com.bluetiger.foodbrocompose.ui.common.stateable.StateAble
-import com.bluetiger.foodbrocompose.ui.screens.new_user.NewUserContent
-import kotlinx.coroutines.launch
 
 private val model = HomeViewModel()
 private val user = Graph.user

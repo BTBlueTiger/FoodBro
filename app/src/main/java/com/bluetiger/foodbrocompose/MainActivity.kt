@@ -14,8 +14,9 @@ import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.NavRoutes
 import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.foodBroNavigator
 import com.bluetiger.foodbrocompose.ui.navigation.nav_drawer.FoodBroNavigationDrawer
 import com.bluetiger.foodbrocompose.ui.screens.home.Home
-import com.bluetiger.foodbrocompose.ui.screens.new_user.NewUserUser
-import com.bluetiger.foodbrocompose.ui.screens.users_list.UsersScreen
+import com.bluetiger.foodbrocompose.ui.screens.user.create.CreateUserScreen
+import com.bluetiger.foodbrocompose.ui.screens.user.list.UsersScreen
+import com.bluetiger.foodbrocompose.ui.screens.user.modify.ModifyUserScreen
 import com.bluetiger.foodbrocompose.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,8 +45,13 @@ class MainActivity : ComponentActivity() {
                                 composable(NavRoutes.USER_LIST.screenName){
                                     UsersScreen()
                                 }
+                                if(FBPreferences.getInstance().isUserSet()){
+                                    composable(NavRoutes.USER.screenName){
+                                        ModifyUserScreen()
+                                    }
+                                }
                                 composable(NavRoutes.NEW_USER.screenName) {
-                                    NewUserUser()
+                                    CreateUserScreen()
                                 }
                                 composable(NavRoutes.FOOD_LIST.screenName) {
                                     Text(text = "Hello Food List!")

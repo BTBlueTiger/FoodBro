@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.ui.screens.new_user
+package com.bluetiger.foodbrocompose.ui.screens.user.create
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
