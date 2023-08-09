@@ -14,6 +14,7 @@ import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.foodBroNavigato
 import com.bluetiger.foodbrocompose.ui.navigation.nav_drawer.FoodBroNavigationDrawer
 import com.bluetiger.foodbrocompose.ui.screens.home.Home
 import com.bluetiger.foodbrocompose.ui.screens.new_user.NewUserUser
+import com.bluetiger.foodbrocompose.ui.screens.users_list.UsersScreen
 
 import com.bluetiger.foodbrocompose.ui.theme.AppTheme
 
@@ -36,6 +37,9 @@ class MainActivity : ComponentActivity() {
                             NavHost(navController = navController, startDestination = NavRoutes.HOME.screenName) {
                                 composable(NavRoutes.HOME.screenName) {
                                     Home()
+                                }
+                                composable(NavRoutes.USER_LIST.screenName){
+                                    UsersScreen()
                                 }
                                 composable(NavRoutes.NEW_USER.screenName) {
                                     NewUserUser()

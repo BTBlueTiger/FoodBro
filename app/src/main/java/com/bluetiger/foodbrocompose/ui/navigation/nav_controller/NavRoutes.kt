@@ -6,6 +6,7 @@ import androidx.compose.material.icons.twotone.Face
 import androidx.compose.material.icons.twotone.Home
 import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material.icons.twotone.List
+import androidx.compose.material.icons.twotone.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 
@@ -19,6 +20,10 @@ enum class NavRoutes(
         Icons.TwoTone.Home,
         "HomeScreen",
         navOnClick = { navController -> navController.navigate(HOME.screenName) }),
+    USER_LIST(
+        Icons.TwoTone.Person,
+        "User List",
+        navOnClick = { navController -> navController.navigate(USER_LIST.screenName) }),
     NEW_USER(
         Icons.TwoTone.Face,
         "New User",

@@ -19,6 +19,10 @@ object Graph {
 
     private val _user = MutableStateFlow(User(""))
 
+    fun setGlobalUser(user: User) {
+        _user.value = user
+    }
+
     val user: StateFlow<User>
         get() = _user
 
