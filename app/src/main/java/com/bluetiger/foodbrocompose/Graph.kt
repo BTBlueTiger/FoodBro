@@ -20,7 +20,7 @@ object Graph {
         UserStore(userDao = database.userDao())
     }
 
-    private val _user = MutableStateFlow(User(""))
+    private val _user = MutableStateFlow(User.DEMO)
 
     fun setGlobalUser(user: User) {
         Log.e("User", user.toString())

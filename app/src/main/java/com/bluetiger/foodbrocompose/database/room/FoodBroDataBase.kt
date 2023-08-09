@@ -9,7 +9,7 @@ import com.bluetiger.foodbrocompose.database.user.UserDao
     entities = [
         User::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 abstract class FoodBroDataBase : RoomDatabase() {
