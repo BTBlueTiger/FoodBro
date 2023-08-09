@@ -19,6 +19,8 @@ import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bluetiger.foodbrocompose.R
+import com.bluetiger.foodbrocompose.database.user.PersonDataValueType
 import com.bluetiger.foodbrocompose.database.user.User
 import com.bluetiger.foodbrocompose.ui.common.headline.HeadLine
 
@@ -74,10 +77,12 @@ fun UserListItem(user: User) {
             },
             confirmButton = {
                 Button(
-                    onClick = { showAcceptClickedUser = false },
+                    onClick = {
+                        showAcceptClickedUser = false
+                    },
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    Text(text = "Yes")
+                    Text(text = "No")
                 }
                 Button(
                     onClick = {
@@ -86,7 +91,7 @@ fun UserListItem(user: User) {
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    Text(text = "No")
+                    Text(text = "Yes")
                 }
             }
         )
@@ -99,7 +104,10 @@ fun UserListItem(user: User) {
             .height(50.dp)
             .clickable {
                 showAcceptClickedUser = true
-            }
+            },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        )
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -122,7 +130,8 @@ fun UserListItem(user: User) {
                 horizontalAlignment = Alignment.Start
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_male_24),
+                    painter = painterResource(
+                        PersonDataValueType.GENDER.getGenderIcon(user.gender?: "")),
                     contentDescription = ""
                 )
             }

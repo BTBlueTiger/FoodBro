@@ -59,5 +59,5 @@ class FBPreferences private constructor() {
     fun getUserEmail() =
         getPreferences().getString(PreferenceTask.USER_EMAIL.name, "")
     fun setUserEmail(email: String) =
-        getPreferenceEditor().putString(PreferenceTask.USER_EMAIL.name, email)
+        getPreferenceEditor().putString(PreferenceTask.USER_EMAIL.name, email).apply()
 }

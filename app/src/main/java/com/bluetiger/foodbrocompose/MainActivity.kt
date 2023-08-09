@@ -1,14 +1,17 @@
 package com.bluetiger.foodbrocompose
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.NavRoutes
 import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.foodBroNavigator
 import com.bluetiger.foodbrocompose.ui.navigation.nav_drawer.FoodBroNavigationDrawer
@@ -17,12 +20,18 @@ import com.bluetiger.foodbrocompose.ui.screens.new_user.NewUserUser
 import com.bluetiger.foodbrocompose.ui.screens.users_list.UsersScreen
 
 import com.bluetiger.foodbrocompose.ui.theme.AppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FBPreferences.getInstance().initiate("FoodBro", this)
         Graph.provide(this)
+
         setContent {
             val navController = foodBroNavigator()
 
