@@ -16,10 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,23 +23,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bluetiger.foodbrocompose.ui.common.headline.HeadLine
 
-
-data class Selection(val label: String, val iconId: Int)
-
 @Composable
-fun SelectionGroup(
+fun SelectionGroupMultiSelect(
     label: String = "",
-    value: String = "",
     modifier: Modifier,
     selections: List<Selection>,
     rows: Int,
     heightPerRow: Int = 100,
     widthPerSelection: Int = 100,
-    onValueChange: (String) -> Unit
-) {
+    onValueChange: (List<Selection>) -> Unit)
+{
     if(label.isNotEmpty())
        HeadLine(headline = label)
-    var selected by remember { mutableStateOf(value) }
+
     val selectionsPerRow: Int = selections.size / rows
 
     var selectionCounter = 0
@@ -58,11 +50,11 @@ fun SelectionGroup(
                 Card(
                     modifier = Modifier
                         .clickable {
-                            selected = selection.label
-                            onValueChange(selected)
+                            selection.clicked = !selection.clicked
+                            onValueChange(selections)
                         }
                         .background(
-                            if (selected == selection.label) MaterialTheme.colorScheme.primary
+                            if (selection.clicked) MaterialTheme.colorScheme.primary
                             else Color.Transparent
                         )
                         .width(widthPerSelection.dp)
@@ -87,3 +79,4 @@ fun SelectionGroup(
         }
     }
 }
+

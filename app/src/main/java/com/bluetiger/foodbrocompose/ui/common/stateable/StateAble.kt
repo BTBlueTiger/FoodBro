@@ -21,12 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import com.bluetiger.foodbrocompose.ui.common.selection.Selection
-import com.bluetiger.foodbrocompose.ui.common.selection.SelectionGroup
+import com.bluetiger.foodbrocompose.ui.common.selection.SelectionGroupSingleSelect
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
+
 /**
  * A simple wrapper class for creating Material3 Compose components with customizable behavior.
  * This class provides a convenient way to create and manage stateful Compose components.
@@ -70,6 +71,9 @@ class StateAble(
         val currentState = mutableStateOf(startState)
         val currentValue = mutableStateOf(startValue)
 
+        fun getState() = currentState.value
+        fun getValue() = currentValue.value
+
         // Functions to update value and state
         fun setValue(value: String) = run { currentValue.value = value }
         fun setState(state: State) = run { currentState.value = state }
@@ -111,7 +115,7 @@ class StateAble(
                 textFieldValue = ""
             else {
                 textFieldValue = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(time))
-                onValueChange(textFieldValue)
+                onValueChange(time.toString())
             }
         }
 
@@ -192,8 +196,7 @@ class StateAble(
         heightPerRow: Int = 100,
         widthPerSelection: Int = 100,
     ) {
-        SelectionGroup(
-            value = value,
+        SelectionGroupSingleSelect(
             label = label,
             modifier = modifier,
             onValueChange = onValueChange,

@@ -17,13 +17,11 @@ import com.bluetiger.foodbrocompose.ui.screens.new_user.NewUserUser
 
 import com.bluetiger.foodbrocompose.ui.theme.AppTheme
 
-
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
+        Graph.provide(this)
         setContent {
             val navController = foodBroNavigator()
 

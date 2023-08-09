@@ -1,6 +1,7 @@
 package com.bluetiger.foodbrocompose.ui.screens.new_user
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,12 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.bluetiger.foodbrocompose.R
+import com.bluetiger.foodbrocompose.database.user.PersonDataValueType
 import com.bluetiger.foodbrocompose.ui.common.headline.HeadLine
 import com.bluetiger.foodbrocompose.ui.common.selection.Selection
+import com.bluetiger.foodbrocompose.ui.common.selection.SelectionGroupMultiSelect
 import com.bluetiger.foodbrocompose.ui.common.stateable.StateAble
-import com.bluetiger.foodbrocompose.user.PersonDataValueType
 import kotlinx.coroutines.launch
-import kotlin.text.StringBuilder
 
 private val model = NewUserViewModel()
 
@@ -39,23 +40,26 @@ fun NewUserUser() {
     val snackBarHostState = SnackbarHostState()
     val scope = rememberCoroutineScope()
 
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(20.dp),
                 onClick = {
+                    model.onCreateNewUserClicked()
                     val list = mutableListOf<String>()
                     model.person.forEach {
-                        if(it.value.errorIfState(StateAble.State.DEFAULT) || it.value.isError()){
+                        if (it.value.errorIfState(StateAble.State.DEFAULT) || it.value.isError()) {
                             list.add(it.key.label)
                         }
                     }
                     val message = StringBuilder()
-                    if(list.isEmpty()){
+                    // No Error Field in List
+                    if (list.isEmpty()) {
 
-                    } else if(list.size >= 2) {
-                        list.joinTo(buffer = message, ",",""," is missing!")
+                    } else if (list.size >= 2) {
+                        list.joinTo(buffer = message, ",", "", " is missing!")
                     } else {
                         message.append("${list[0]} is missing!")
                     }
@@ -87,7 +91,6 @@ private fun BasicPersonalInformation() {
 private fun SimpleDivider() {
     Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
 }
-
 
 
 @Composable
@@ -132,7 +135,7 @@ fun PersonalInformation() {
     IconWithRows(image = Icons.TwoTone.Person, rowList = {
         listOf(
             Row(Modifier.fillMaxWidth()) {
-                SimpleStateOutlinedTextField(Modifier, PersonDataValueType.NAME)
+                SimpleStateOutlinedTextField(Modifier, PersonDataValueType.EMAIL)
             },
             Row(Modifier.fillMaxWidth()) {
                 Column(
@@ -160,11 +163,11 @@ fun PersonalInformation() {
 }
 
 
-
 @Composable
 fun SimpleStateOutlinedTextField(
     modifier: Modifier,
-    valueTyp: PersonDataValueType) {
+    valueTyp: PersonDataValueType
+) {
     StateAble(
         value = model.getValue(valueTyp),
         label = valueTyp.label,
@@ -180,7 +183,7 @@ fun DatePickerDialog() {
     IconWithRows(image = Icons.TwoTone.DateRange) {
         listOf(
             Row(Modifier.fillMaxWidth()) {
-                SimpleStateDatePicker(modifier = Modifier, valueTyp = PersonDataValueType.DATE)
+                SimpleStateDatePicker(modifier = Modifier, valueTyp = PersonDataValueType.BIRTHDAY)
             }
         )
     }
@@ -190,7 +193,8 @@ fun DatePickerDialog() {
 @Composable
 fun SimpleStateDatePicker(
     modifier: Modifier,
-    valueTyp: PersonDataValueType) {
+    valueTyp: PersonDataValueType
+) {
     StateAble(
         value = model.getValue(valueTyp),
         label = valueTyp.label,
@@ -202,8 +206,6 @@ fun SimpleStateDatePicker(
 }
 
 
-
-
 @Composable
 fun GenderSelection() {
     StateAble(
@@ -213,8 +215,28 @@ fun GenderSelection() {
         onValueChange = { model.setValue(PersonDataValueType.GENDER, it) }
     ).StateAbleSelectionGroup(
         selections = listOf(
-            Selection("Male", R.drawable.baseline_male_24),
-            Selection("Female", R.drawable.baseline_female_24)
+            Selection("Male", R.drawable.baseline_male_24, false),
+            Selection("Female", R.drawable.baseline_female_24, false)
         ),
-        rows = 1)
+        rows = 1
+    )
+}
+
+
+@Composable
+fun SpecialFemale() {
+
+    //HeadLine(headline = "Babys?")
+
+    SelectionGroupMultiSelect(
+        modifier = Modifier,
+        selections = listOf(
+            Selection("Pregnant", R.drawable.baseline_pregnant_woman_24, false),
+            Selection("Breastfeeding", R.drawable.baseline_face_5_24, false)
+        ),
+        rows =1,
+        onValueChange = {
+            Log.e("Test", it.toString())
+        }
+    )
 }
