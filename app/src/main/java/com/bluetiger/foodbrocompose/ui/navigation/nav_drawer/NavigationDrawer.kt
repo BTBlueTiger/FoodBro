@@ -43,16 +43,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserEmail(){
+fun UserEmail() {
     var emailState by remember { mutableStateOf("") }
 
-    LaunchedEffect(key1 = emailState){
+    LaunchedEffect(key1 = emailState) {
         Graph.setGlobalUserByEmail(emailState)
     }
 
-    if(FBPreferences.getInstance().isUserSet()){
-        val email = FBPreferences.getInstance().getUserEmail()?: ""
-        if(email.isNotEmpty()){
+    if (FBPreferences.getInstance().isUserSet()) {
+        val email = FBPreferences.getInstance().getUserEmail() ?: ""
+        if (email.isNotEmpty()) {
             emailState = email
         }
     }
@@ -72,7 +72,11 @@ fun FoodBroNavigationDrawer(
     val scope = rememberCoroutineScope()
     val screenWidth = LocalConfiguration.current.screenWidthDp * width
 
-    val items = NavRoutes.values()
+    val user = Graph.user.collectAsState()
+
+    val items = if (user.value.email != "") NavRoutes.values()
+                else NavRoutes.values()
+                        .filter { it.userDependingRoute }.toTypedArray()
     val selectedItem = remember { mutableStateOf(items[0]) }
 
 

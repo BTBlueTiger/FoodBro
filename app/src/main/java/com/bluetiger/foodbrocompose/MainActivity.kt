@@ -14,6 +14,7 @@ import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.NavRoutes
 import com.bluetiger.foodbrocompose.ui.navigation.nav_controller.foodBroNavigator
 import com.bluetiger.foodbrocompose.ui.navigation.nav_drawer.FoodBroNavigationDrawer
 import com.bluetiger.foodbrocompose.ui.screens.home.Home
+import com.bluetiger.foodbrocompose.ui.screens.user.activity.PhysicalActivityScreen
 import com.bluetiger.foodbrocompose.ui.screens.user.create.CreateUserScreen
 import com.bluetiger.foodbrocompose.ui.screens.user.list.UsersScreen
 import com.bluetiger.foodbrocompose.ui.screens.user.modify.ModifyUserScreen
@@ -38,17 +39,23 @@ class MainActivity : ComponentActivity() {
                     FoodBroNavigationDrawer(
                         navController = navController,
                         content = {
-                            NavHost(navController = navController, startDestination = NavRoutes.HOME.screenName) {
+                            NavHost(
+                                navController = navController,
+                                startDestination = NavRoutes.HOME.screenName
+                            ) {
                                 composable(NavRoutes.HOME.screenName) {
                                     Home()
                                 }
-                                composable(NavRoutes.USER_LIST.screenName){
+                                composable(NavRoutes.USER_LIST.screenName) {
                                     UsersScreen()
                                 }
-                                if(FBPreferences.getInstance().isUserSet()){
-                                    composable(NavRoutes.USER.screenName){
-                                        ModifyUserScreen()
-                                    }
+
+                                composable(NavRoutes.USER.screenName) {
+                                    ModifyUserScreen()
+                                }
+                                composable(NavRoutes.PHYSICAL_ACTIVITY.screenName) {
+                                    PhysicalActivityScreen()
+
                                 }
                                 composable(NavRoutes.NEW_USER.screenName) {
                                     CreateUserScreen()
