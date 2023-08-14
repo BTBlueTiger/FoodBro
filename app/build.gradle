@@ -2,6 +2,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id("com.google.dagger.hilt.android")
 }
 
 apply plugin: 'kotlin-kapt'
@@ -60,46 +62,68 @@ android {
 
 }
 
+// Versions
+def roomVersion = "2.5.2"
+def composeVersion = "1.4.3"
+def navigationVersion = "2.6.0"
+def hiltVersion = "2.44"
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.test:core-ktx:1.5.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-    implementation 'androidx.work:work-runtime-ktx:2.8.1'
-    implementation 'org.tensorflow:tensorflow-lite-support:0.4.2'
-    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
-    implementation 'org.tensorflow:tensorflow-lite-gpu:2.3.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    // Kotlin Core
+    implementation "androidx.core:core-ktx:1.10.1"
 
-    // Tensorflow Lite dependencies
-    implementation('org.tensorflow:tensorflow-lite-support:0.4.2') {
-        exclude module: 'tensorflow-lite-support-0.1.0-runtime'
-    }
+    // AndroidX Components
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
-    // Room components
-    implementation "androidx.room:room-runtime:2.5.2"
-    kapt "androidx.room:room-compiler:2.5.2"
+    // Navigation Components
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
-    // Optional: Room Kotlin extensions and RxJava support
-    implementation "androidx.room:room-ktx:2.5.2"
-    implementation "androidx.room:room-rxjava3:2.5.2"
-
-    implementation 'com.google.android.gms:play-services-tflite-gpu:16.2.0'
-
-
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    // Compose Dependencies
+    implementation "androidx.compose.ui:ui:$composeVersion"
+    implementation "androidx.compose.material:material:$composeVersion"
+    implementation "androidx.compose.ui:ui-tooling-preview:$composeVersion"
     implementation "androidx.compose.material3:material3:1.1.1"
     implementation "androidx.compose.material3:material3-window-size-class:1.1.1"
-    implementation "androidx.compose.ui:ui:1.4.3"
-    implementation "androidx.compose.material:material:1.4.3"
-    implementation "androidx.compose.ui:ui-tooling-preview:1.4.3"
     implementation "androidx.activity:activity-compose:1.7.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
 
+    // Room Database
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-rxjava3:$roomVersion"
+
+    // Google Play Services
+    implementation "com.google.android.gms:play-services-location:21.0.1"
+    implementation "com.google.android.gms:play-services-tflite-gpu:16.2.0"
+
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    // TensorFlow Lite
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.2") {
+        exclude module: 'tensorflow-lite-support-0.1.0-runtime'
+    }
+    implementation "org.tensorflow:tensorflow-lite-metadata:0.1.0"
+    implementation "org.tensorflow:tensorflow-lite-gpu:2.3.0"
+
+    // Dagger Hilt
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
+}
+
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
