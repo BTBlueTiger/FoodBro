@@ -51,13 +51,4 @@ class FBPreferences private constructor() {
     private fun getPreferenceEditor() =
         getPreferences().edit()
 
-    fun isUserSet() =
-        getPreferences().getBoolean(PreferenceTask.USER_IS_SET.name, false)
-    fun setUserIsSet(boolean: Boolean) =
-        getPreferenceEditor().putBoolean(PreferenceTask.USER_IS_SET.name, boolean).apply()
-
-    fun getUserEmail() =
-        getPreferences().getString(PreferenceTask.USER_EMAIL.name, "")
-    fun setUserEmail(email: String) =
-        getPreferenceEditor().putString(PreferenceTask.USER_EMAIL.name, email).apply()
 }

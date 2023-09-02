@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bluetiger.foodbrocompose.main_activity.NavRoutes
 import com.bluetiger.foodbrocompose.main_activity.RouteType
@@ -47,7 +48,7 @@ fun FoodBroNavigationDrawer(
                         navRouteList.value.map { item ->
                             if (item.routeType != RouteType.INTERN)
                                 NavigationDrawerItem(
-                                    icon = { Icon(item.icon, contentDescription = "") },
+                                    icon = { Icon(painterResource(id = item.iconID), contentDescription = "") },
                                     label = { Text(item.screenName) },
                                     selected = item == selectedNavRoute,
                                     onClick = {

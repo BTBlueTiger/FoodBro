@@ -1,5 +1,6 @@
 package com.bluetiger.foodbrocompose.main_activity
 
+import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.twotone.Face
@@ -10,10 +11,14 @@ import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
 
@@ -26,7 +31,7 @@ enum class RouteType {
 }
 
 enum class NavRoutes(
-    val icon: ImageVector,
+    val iconID: Int,
     val screenName: String,
     val routeType: RouteType,
     val category: NavRouteCategory,
@@ -35,68 +40,71 @@ enum class NavRoutes(
 ) {
 
     HOME(
-        Icons.TwoTone.Home,
+        R.drawable.twotone_home_24,
         "HomeScreen",
         RouteType.USER_DEPENDING,
         NavRouteCategory.COMMON,
         navOnClick = { navController -> navController.navigate(HOME) }),
     USER_LIST(
-        Icons.TwoTone.Person,
+        R.drawable.twotone_people_24,
         "User List",
         RouteType.FREE_ACCESS,
         NavRouteCategory.USER,
         navOnClick = { navController -> navController.navigate(USER_LIST) }),
     USER(
-        Icons.TwoTone.Person,
+        R.drawable.twotone_person_24,
         "You",
         RouteType.USER_DEPENDING,
         NavRouteCategory.USER,
         navOnClick = { navController -> navController.navigate(USER) }
     ),
     PHYSICAL_ACTIVITY(
-        Icons.TwoTone.Star,
+        R.drawable.twotone_sports_24,
         "Activity",
         RouteType.USER_DEPENDING,
         NavRouteCategory.USER,
         navOnClick = { navController -> navController.navigate(PHYSICAL_ACTIVITY) }
     ),
     NEW_USER(
-        Icons.TwoTone.Face,
+        R.drawable.twotone_person_add_24,
         "New User",
         RouteType.FREE_ACCESS,
         NavRouteCategory.USER,
         navOnClick = { navController -> navController.navigate(NEW_USER) }),
     FOOD_FACTS_BY_BARCODE(
-        Icons.TwoTone.Info,
+        R.drawable.twotone_qr_code_scanner_24,
         "Food Facts by Barcode",
         RouteType.FREE_ACCESS,
         NavRouteCategory.FOOD,
-        navOnClick = { navController -> navController.navigate(FOOD_FACTS_BY_BARCODE) },
-        listOf("Food Facts by Barcode/{barcode}")
+        navOnClick = { navController -> navController.navigate(FOOD_FACTS_BY_BARCODE) }
     ),
     FOOD_LIST(
-        Icons.TwoTone.List,
+        R.drawable.twotone_table_chart_24,
         "Food Table",
         RouteType.FREE_ACCESS,
         NavRouteCategory.FOOD,
         navOnClick = { navController -> navController.navigate(FOOD_LIST) }),
     FOOD_PREDICTION(
-        Icons.TwoTone.Info,
+        R.drawable.twotone_question_mark_24,
         "Food Prediction",
         RouteType.FREE_ACCESS,
         NavRouteCategory.FOOD,
         navOnClick = { navController -> navController.navigate(FOOD_PREDICTION) }),
     OPEN_FOOD_FACT_SCREEN(
-        Icons.Default.AddCircle,
+        R.drawable.twotone_food_bank_24,
         "OpenFoodFactScreens",
-
         RouteType.INTERN,
         NavRouteCategory.INTERN,
-        navOnClick = {
-                navController -> navController.navigate(OPEN_FOOD_FACT_SCREEN)
-        },
-        listOf("barcode")
-    );
+        navOnClick = { navController -> navController.navigate(OPEN_FOOD_FACT_SCREEN) },
+        listOf("barcode")),
+    SCANS(
+        R.drawable.twotone_history_24,
+        "Last_Scans",
+        RouteType.USER_DEPENDING,
+        NavRouteCategory.FOOD,
+        navOnClick = { navController -> navController.navigate(SCANS) }
+    )
+    ;
 
     @Composable
     fun GetComposable(route: NavRoutes, navController: NavController) = when (route) {
