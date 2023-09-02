@@ -47,9 +47,9 @@ private fun <T> ColorStateOutlineTextFieldBuilder(
     ConditionOutlineTextField(
         state = state,
         onValueChange = onValueChange,
-        suffix = { valueType.unit },
-        label = { valueType.label },
-        placeholder = { valueType.placeHolder })
+        suffix = { Text(text = valueType.unit) },
+        label = { Text(text = valueType.label) },
+        placeholder = { Text(text = valueType.placeHolder) })
 }
 
 @Composable
@@ -77,7 +77,6 @@ fun AddEditUserScreen(
                         if(onSaveUserRequest.success){
                             navigateToHome()
                         } else {
-                            Log.e("Tag", onSaveUserRequest.snackBarMessage.toString())
                             onSaveUserRequest.snackBarMessage?.let {
                                 snackbarHostState.showSnackbar(it)
                             }

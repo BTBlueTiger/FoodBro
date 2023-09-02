@@ -21,6 +21,7 @@ import androidx.navigation.Navigator
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
+import com.bluetiger.foodbrocompose.feature_user.ui.user_list.UserListScreen
 
 enum class NavRouteCategory(val displayString: String) {
     COMMON("Common"), USER("User"), FOOD("Food"), INTERN("Intern")
@@ -108,8 +109,9 @@ enum class NavRoutes(
 
     @Composable
     fun GetComposable(route: NavRoutes, navController: NavController) = when (route) {
+        HOME -> Text(text = "Hello")
         USER -> Text(text = "Hello USER")
-        USER_LIST -> Text(text = "Hello UserList")
+        USER_LIST -> UserListScreen()
         PHYSICAL_ACTIVITY -> Text(text = "Hello PHYSICAL_ACTIVITY")
         NEW_USER -> AddEditUserScreen(navigateToHome = { navController.navigate(HOME.screenName) })
         FOOD_FACTS_BY_BARCODE -> FoodFactsByBarcodeScreen {
