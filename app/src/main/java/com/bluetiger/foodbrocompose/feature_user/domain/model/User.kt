@@ -26,7 +26,8 @@ data class User(
         const val MAX_HEIGHT = 251
         const val MAX_WEIGHT = 635
     }
-}
 
-class InvalidUserException(message: String) : Exception(message)
+    class InvalidUserException(message: String) : Exception(message)
+
+}
 

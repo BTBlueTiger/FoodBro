@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bluetiger.foodbrocompose.main_activity.NavRoutes
+import com.bluetiger.foodbrocompose.main_activity.RouteType
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,6 +36,7 @@ fun FoodBroNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(Modifier.fillMaxWidth(0.7f)) {
                 navRoutes
+                    .filter { it.routeType != RouteType.INTERN }
                     .groupBy { it.category }
                     .map { navRouteList ->
                         Spacer(modifier = Modifier.height(12.dp))
@@ -43,18 +45,19 @@ fun FoodBroNavigationDrawer(
                             modifier = Modifier.padding(4.dp)
                         )
                         navRouteList.value.map { item ->
-                            NavigationDrawerItem(
-                                icon = { Icon(item.icon, contentDescription = "") },
-                                label = { Text(item.screenName) },
-                                selected = item == selectedNavRoute,
-                                onClick = {
-                                    onClick(item)
-                                    scope.launch { drawerState.close() }
-                                },
-                                modifier = Modifier
-                                    .padding(NavigationDrawerItemDefaults.ItemPadding)
-                                    .fillMaxWidth()
-                            )
+                            if (item.routeType != RouteType.INTERN)
+                                NavigationDrawerItem(
+                                    icon = { Icon(item.icon, contentDescription = "") },
+                                    label = { Text(item.screenName) },
+                                    selected = item == selectedNavRoute,
+                                    onClick = {
+                                        onClick(item)
+                                        scope.launch { drawerState.close() }
+                                    },
+                                    modifier = Modifier
+                                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                        .fillMaxWidth()
+                                )
                         }
                         Divider()
                     }

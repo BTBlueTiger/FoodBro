@@ -14,7 +14,6 @@ import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -30,31 +29,27 @@ import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.LeftColIconRightColRows
 import com.bluetiger.foodbrocompose.ui.common.components.headline.HeadLine
+import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextField
 import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionGroupSingleSelect
 import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionModel
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.DatePickerTextField
+import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.utility.ConverterUtility
 import kotlinx.coroutines.launch
 
 
 @Composable
-private fun <T> OutlineTextFieldBuilder(
-    state: InputFieldState<T>,
+private fun <T> ColorStateOutlineTextFieldBuilder(
+    state: ConditionOutlineTextFieldPack<T>,
     onValueChange: (String) -> Unit,
-    valueType: User.ValueType
-) {
-    OutlinedTextField(
-        singleLine = true,
-        value = state.value.toString().emptyIfZero(),
+    valueType: User.ValueType,
+){
+    ConditionOutlineTextField(
+        state = state,
         onValueChange = onValueChange,
-        label = { Text(text = valueType.label) },
-        placeholder = { Text(text = valueType.placeHolder) },
-        suffix = { Text(text = valueType.unit) },
-        modifier = Modifier,
-        colors = state.colorCase.color(),
-        isError = state.isError,
-        supportingText = state.supportingText
-    )
+        suffix = { valueType.unit },
+        label = { valueType.label },
+        placeholder = { valueType.placeHolder })
 }
 
 @Composable
@@ -110,7 +105,7 @@ fun AddEditUserScreen(
                     listOf(
                         // Email
                         Row(Modifier.fillMaxWidth()) {
-                            OutlineTextFieldBuilder(
+                            ColorStateOutlineTextFieldBuilder(
                                 state = emailState,
                                 onValueChange = {
                                     viewModel.onEvent(
@@ -122,7 +117,7 @@ fun AddEditUserScreen(
                         // Height
                         Row(Modifier.fillMaxWidth()) {
 
-                            OutlineTextFieldBuilder(
+                            ColorStateOutlineTextFieldBuilder(
                                 state = heightState,
                                 onValueChange = {
                                     if (it.toIntOrNull() != null) {
@@ -139,7 +134,7 @@ fun AddEditUserScreen(
                         },
                         // Weight
                         Row(Modifier.fillMaxWidth()) {
-                            OutlineTextFieldBuilder(
+                            ColorStateOutlineTextFieldBuilder(
                                 state = weightState,
                                 onValueChange = {
                                     if (it.toIntOrNull() != null) {

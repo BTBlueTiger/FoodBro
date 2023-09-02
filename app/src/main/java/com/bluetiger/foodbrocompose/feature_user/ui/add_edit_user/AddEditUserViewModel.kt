@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
+import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,20 +25,20 @@ class AddEditUserViewModel @Inject constructor(
 
     private val TAG = "AddEditUser"
 
-    private val _email = mutableStateOf(InputFieldState(""))
-    val email: State<InputFieldState<String>> = _email
+    private val _email = mutableStateOf(ConditionOutlineTextFieldPack(""))
+    val email: State<ConditionOutlineTextFieldPack<String>> = _email
 
-    private val _height = mutableStateOf(InputFieldState(0))
-    val height: State<InputFieldState<Int>> = _height
+    private val _height = mutableStateOf(ConditionOutlineTextFieldPack(0))
+    val height: State<ConditionOutlineTextFieldPack<Int>> = _height
 
-    private val _weight = mutableStateOf(InputFieldState(0))
-    val weight: State<InputFieldState<Int>> = _weight
+    private val _weight = mutableStateOf(ConditionOutlineTextFieldPack(0))
+    val weight: State<ConditionOutlineTextFieldPack<Int>> = _weight
 
-    private val _gender = mutableStateOf(InputFieldState(Gender.NONE))
-    val gender: State<InputFieldState<Gender>> = _gender
+    private val _gender = mutableStateOf(ConditionOutlineTextFieldPack(Gender.NONE))
+    val gender: State<ConditionOutlineTextFieldPack<Gender>> = _gender
 
-    private val _birthday = mutableStateOf(InputFieldState(0L))
-    val birthday: State<InputFieldState<Long>> = _birthday
+    private val _birthday = mutableStateOf(ConditionOutlineTextFieldPack(0L))
+    val birthday: State<ConditionOutlineTextFieldPack<Long>> = _birthday
 
     private val _onSaveUserRequest = mutableStateOf(OnSaveUserResult())
     val onSaveUserRequest: State<OnSaveUserResult> = _onSaveUserRequest
@@ -124,7 +125,6 @@ class AddEditUserViewModel @Inject constructor(
             is AddEditUserEvent.SaveUser -> {
                 viewModelScope.launch {
 
-                    Log.e(TAG, birthday.value.toString())
                     if (_email.isValid(User.ValueType.EMAIL, email) &&
                         _height.isValid(User.ValueType.HEIGHT, height) &&
                         _weight.isValid(User.ValueType.WEIGHT, weight) &&
@@ -159,9 +159,9 @@ class AddEditUserViewModel @Inject constructor(
         val success: Boolean = false
     )
 
-    private inline fun <reified T> MutableState<InputFieldState<T>>.isValid(
+    private inline fun <reified T> MutableState<ConditionOutlineTextFieldPack<T>>.isValid(
         valueType: User.ValueType,
-        state: State<InputFieldState<T>>
+        state: State<ConditionOutlineTextFieldPack<T>>
     ): Boolean {
         Log.e(TAG, valueType.toString())
 
@@ -274,7 +274,7 @@ class AddEditUserViewModel @Inject constructor(
         }
     }
 
-    private inline fun <reified T> MutableState<InputFieldState<T>>.checkValue(state: State<InputFieldState<T>>) {
+    private inline fun <reified T> MutableState<ConditionOutlineTextFieldPack<T>>.checkValue(state: State<ConditionOutlineTextFieldPack<T>>) {
 
         if (T::class == String::class) {
             if ((value.value as String).isEmpty()) {
@@ -308,6 +308,5 @@ class AddEditUserViewModel @Inject constructor(
             }
         }
     }
-
 }
 

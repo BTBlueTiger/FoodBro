@@ -11,24 +11,30 @@ sealed class OutlineTextFieldColorCases {
     object DEFAULT : OutlineTextFieldColorCases()
     object ERROR : OutlineTextFieldColorCases()
     object VALID : OutlineTextFieldColorCases()
+    object PENDING : OutlineTextFieldColorCases()
 
 
     @Composable
     fun color() =
         when (this) {
             DEFAULT -> OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline,
             )
 
             ERROR -> OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = MaterialTheme.colorScheme.error,
             )
 
             VALID -> OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                focusedBorderColor = Color.dark_onGreenContainer,
+                focusedLabelColor = Color.dark_onGreenContainer,
                 unfocusedBorderColor = Color.dark_onGreenContainer,
             )
+            PENDING -> OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.dark_onYellowContainer,
+                focusedLabelColor = Color.light_YellowContainer,
+                focusedTextColor = Color.light_YellowContainer
+            )
         }
+
 }
