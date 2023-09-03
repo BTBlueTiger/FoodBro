@@ -13,55 +13,78 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.bluetiger.foodbrocompose.main_activity.NavRoutes
-import com.bluetiger.foodbrocompose.main_activity.RouteType
+import androidx.lifecycle.ViewModel
+import com.bluetiger.foodbrocompose.main_activity.FoodBroActivityModel
+import com.bluetiger.foodbrocompose.main_activity.NavManager
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun FoodBroNavigationDrawer(
     drawerState: DrawerState,
-    selectedNavRoute: NavRoutes,
-    navRoutes: List<NavRoutes>,
-    onClick: (NavRoutes) -> Unit,
+    selectedNavRoute: NavManager? = null,
+    onClick: (NavManager) -> Unit,
+    viewModel: FoodBroActivityModel,
     navHost: @Composable () -> Unit
 ) {
-
     val scope = rememberCoroutineScope()
+    val userState = viewModel.user.collectAsState()
+    val routes = remember { mutableStateListOf<NavManager>() }
+
+    LaunchedEffect(key1 = userState.value) {
+        routes.clear()
+        routes.addAll(
+            if (userState.value != null) {
+                NavManager.navRoutesFreeAccess + NavManager.navRoutesUserDepending
+            } else {
+                NavManager.navRoutesFreeAccess
+            }
+        )
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(Modifier.fillMaxWidth(0.7f)) {
-                navRoutes
-                    .filter { it.routeType != RouteType.INTERN }
-                    .groupBy { it.category }
-                    .map { navRouteList ->
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = navRouteList.key.displayString,
-                            modifier = Modifier.padding(4.dp)
-                        )
-                        navRouteList.value.map { item ->
-                            if (item.routeType != RouteType.INTERN)
-                                NavigationDrawerItem(
-                                    icon = { Icon(painterResource(id = item.iconID), contentDescription = "") },
-                                    label = { Text(item.screenName) },
-                                    selected = item == selectedNavRoute,
-                                    onClick = {
-                                        onClick(item)
-                                        scope.launch { drawerState.close() }
-                                    },
-                                    modifier = Modifier
-                                        .padding(NavigationDrawerItemDefaults.ItemPadding)
-                                        .fillMaxWidth()
+                routes.groupBy {
+                    it.category
+                }.map { navRoutes ->
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = navRoutes.key.displayString,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                    navRoutes.value.map {
+                        NavigationDrawerItem(
+                            icon = {
+                                Icon(
+                                    painterResource(id = it.iconID),
+                                    contentDescription = ""
                                 )
-                        }
-                        Divider()
+                            },
+                            label = { Text(it.screenName) },
+                            selected = it == selectedNavRoute,
+                            onClick = {
+                                onClick(it)
+                                scope.launch { drawerState.close() }
+                            },
+                            modifier = Modifier
+                                .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                .fillMaxWidth()
+                        )
                     }
+                    Divider()
+                }
             }
         }) {
         navHost()

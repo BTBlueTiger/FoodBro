@@ -9,13 +9,14 @@ import java.time.format.DateTimeFormatter
 object ConverterUtility {
     fun localDateToYear(date: LocalDate) = LocalDate.now().year - date.year
 
-    fun longToDate(long: Long) = when (long) {
+    fun longToDate(long: Long) : String = when (long) {
         0L -> ""
         else ->
             try {
                 longToLocalDate(long).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
             } catch (e: IllegalArgumentException) {
                 Log.e("Long to Simple Date", "$long is not valid")
+                ""
             }
     }
 

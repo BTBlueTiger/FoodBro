@@ -59,7 +59,8 @@ fun <T>SelectionGroupSingleSelect(
                             onValueChange(selected)
                         }
                         .background(
-                            if (selected == selection.value) MaterialTheme.colorScheme.primary
+                            if (value == selection.value)
+                                MaterialTheme.colorScheme.primary
                             else Color.Transparent
                         )
                         .width(widthPerSelection.dp)

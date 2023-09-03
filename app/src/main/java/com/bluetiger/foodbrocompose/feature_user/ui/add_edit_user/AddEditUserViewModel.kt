@@ -5,9 +5,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
@@ -19,9 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditUserViewModel @Inject constructor(
-    private val userUseCases: UserUseCases,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    private val userUseCases: UserUseCases
+) : ViewModel(), FBPreferences.IPreferenceAble {
 
     private val TAG = "AddEditUser"
 
@@ -43,15 +42,13 @@ class AddEditUserViewModel @Inject constructor(
     private val _onSaveUserRequest = mutableStateOf(OnSaveUserResult())
     val onSaveUserRequest: State<OnSaveUserResult> = _onSaveUserRequest
 
-    private var currentUserEmail: String? = null
+    fun onEvent(event: AddEditUserEvent) {
+        when (event) {
 
-    init {
-        savedStateHandle.get<String>("userEmail")?.let { mail ->
-            if (mail.isNotEmpty()) {
-                viewModelScope.launch {
-                    userUseCases.getUser(mail)?.also { user ->
-                        currentUserEmail = user.email
-
+            is AddEditUserEvent.EditUser -> {
+                this.viewModelScope.launch {
+                    val user = userUseCases.getUser(event.email)
+                    if (user != null) {
                         _email.value = _email.value.copy(
                             value = user.email
                         )
@@ -64,6 +61,9 @@ class AddEditUserViewModel @Inject constructor(
                             value = user.weight
                         )
 
+                        Log.e("User", user.toString())
+
+
                         _birthday.value = _birthday.value.copy(
                             value = user.birthday
                         )
@@ -74,12 +74,7 @@ class AddEditUserViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
 
-
-    fun onEvent(event: AddEditUserEvent) {
-        when (event) {
             is AddEditUserEvent.EnteredValue<*> -> {
 
                 when (event.enteredValueType) {
@@ -131,6 +126,8 @@ class AddEditUserViewModel @Inject constructor(
                         _gender.isValid(User.ValueType.GENDER, gender) &&
                         _birthday.isValid(User.ValueType.BIRTHDAY, birthday)
                     ) {
+
+
                         userUseCases.addUser(
                             User(
                                 email = email.value.value,
@@ -144,6 +141,10 @@ class AddEditUserViewModel @Inject constructor(
                             success = true,
                             snackBarMessage = null
                         )
+
+                        setUserIsSet(true)
+                        setUser(email.value.value)
+
                     } else {
                         _onSaveUserRequest.value = onSaveUserRequest.value.copy(
                             success = false
@@ -155,7 +156,7 @@ class AddEditUserViewModel @Inject constructor(
     }
 
     data class OnSaveUserResult(
-        val snackBarMessage : String? = null,
+        val snackBarMessage: String? = null,
         val success: Boolean = false
     )
 

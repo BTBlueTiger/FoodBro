@@ -1,5 +1,6 @@
 package com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield
 
+import android.util.Log
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,6 +13,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,13 +23,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import com.bluetiger.foodbrocompose.ui.common.components.datepicker.DatePickerDialog
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
+import com.bluetiger.foodbrocompose.utility.ConverterUtility
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
 fun DatePickerTextField(
-    value: String,
+    value: Long,
     onValueChange: (Long) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -52,22 +55,13 @@ fun DatePickerTextField(
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-    var time by remember { mutableStateOf(0L) }
-    var textFieldValue by remember { mutableStateOf("") }
 
-    LaunchedEffect(key1 = time) {
-        if (time == 0L)
-            textFieldValue = ""
-        else {
-            textFieldValue = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(time))
-            onValueChange(time)
-        }
-    }
+    var showDialog by remember { mutableStateOf(false) }
+    var time by remember { mutableLongStateOf(value) }
 
     OutlinedTextField(
-        value = textFieldValue,
-        onValueChange = { },
+        value = ConverterUtility.longToDate(value),
+        onValueChange = { onValueChange(time) },
         label = { label?.invoke() },
         placeholder = { placeholder?.invoke() },
         leadingIcon = { leadingIcon?.invoke() },

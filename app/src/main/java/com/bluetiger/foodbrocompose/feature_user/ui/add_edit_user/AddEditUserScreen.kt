@@ -55,8 +55,14 @@ private fun <T> ColorStateOutlineTextFieldBuilder(
 @Composable
 fun AddEditUserScreen(
     navigateToHome: () -> Unit,
+    email : String = "",
     viewModel: AddEditUserViewModel = hiltViewModel()
 ) {
+
+    if(email.isNotEmpty()){
+        viewModel.onEvent(AddEditUserEvent.EditUser(email))
+    }
+
     val emailState = viewModel.email.value
     val heightState = viewModel.height.value
     val weightState = viewModel.weight.value
@@ -158,7 +164,7 @@ fun AddEditUserScreen(
                     listOf(
                         Row(Modifier.fillMaxWidth()) {
                             DatePickerTextField(
-                                value = ConverterUtility.longToDate(birthdayState.value).toString(),
+                                value = birthdayState.value,
                                 label = { Text(text = "Birthday") },
                                 placeholder = { Text(text = "28.08.1995") },
                                 modifier = Modifier,
