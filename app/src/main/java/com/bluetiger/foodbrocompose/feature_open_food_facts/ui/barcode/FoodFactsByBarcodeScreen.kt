@@ -13,9 +13,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -25,11 +26,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
-import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.extractor.OpenFoodFactsResponseExtractorImpl
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.BarcodeScannerVideoView
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.FoodFactScreen
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextField
+import kotlinx.coroutines.launch
 
 @Composable
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
@@ -49,6 +48,24 @@ fun FoodFactsByBarcodeScreen(
     val barcodeScanner = BarcodeScannerVideoView()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+
+
+    LaunchedEffect(key1 = responseState) {
+        if (responseState.barcode.isNotEmpty())
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "A Product from: ${responseState.productGeneral?.brands} is found",
+                    actionLabel = "Show",
+                    withDismissAction = true
+                ).also {
+                    if (it == SnackbarResult.ActionPerformed){
+                        navigateToOpenFoodFacts(responseState.barcode)
+                    }
+                }
+            }
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -73,20 +90,17 @@ fun FoodFactsByBarcodeScreen(
                 Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             )
-
             {
                 if (barcodeState.isValid) {
                     Row(Modifier, horizontalArrangement = Arrangement.Center) {
                         Button(onClick = {
                             viewModel.event(FoodFactsByBarcodeEvents.BarcodeResponseRequest)
-                            navigateToOpenFoodFacts(barcodeState.value)
                         })
                         {
                             Text(text = "Send Request")
                         }
                     }
                 }
-
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -124,7 +138,6 @@ fun FoodFactsByBarcodeScreen(
                                 }
                             )
                         }
-
                     }
                 }
             }

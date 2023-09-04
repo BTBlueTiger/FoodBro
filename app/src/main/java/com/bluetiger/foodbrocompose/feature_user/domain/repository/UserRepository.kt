@@ -13,7 +13,6 @@ abstract class UserRepository {
 
     fun setUser(user: User?){
         _flowUser.value = user
-        Log.e("User", user.toString())
     }
 
 

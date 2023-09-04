@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model
+package com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriments
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

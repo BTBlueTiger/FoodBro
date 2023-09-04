@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model
+package com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -51,11 +51,11 @@ data class NutriScoreData(
     @SerialName("saturated_fat_value")
     val saturatedFatValue: Float = 0.0f,
     val score: Int = 0,
-    val sodium: Int = 0,
+    val sodium: Float = 0.0f,
     @SerialName("sodium_points")
     val sodiumPoints: Int = 0,
     @SerialName("sodium_value")
-    val sodiumValue: Int = 0,
+    val sodiumValue: Float = 0.0f,
     val sugars: Float = 0.0f,
     @SerialName("sugars_points")
     val sugarsPoints: Int = 0,

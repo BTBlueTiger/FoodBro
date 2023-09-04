@@ -6,6 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.bluetiger.foodbrocompose.R
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.FoodFactScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.user_list.UserListScreen
 
@@ -158,7 +160,28 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
+                FoodFactsByBarcodeScreen(navigateToOpenFoodFacts = { navController.navigate(OpenFoodFactScreen().screenName + "/$it") })
+            }
+        }
+    }
+
+    data class OpenFoodFactScreen(
+        override val iconID: Int = R.drawable.twotone_food_bank_24,
+        override val screenName: String = "OpenFoodFactScreens",
+        override val routeType: RouteType = RouteType.INTERN,
+        override val category: NavRouteCategory = NavRouteCategory.INTERN,
+        override val extras: List<String> = listOf("barcode")
+    ) : NavManager() {
+        override fun addRoute(
+            navGraphBuilder: NavGraphBuilder,
+            navController: NavController,
+            topModel: FoodBroActivityModel
+        ) {
+            navGraphBuilder.composable(screenName) {
                 Text(text = "UserList")
+            }
+            navGraphBuilder.composable("$screenName/{barcode}"){
+                it.arguments?.getString("barcode")?.let { it1 -> FoodFactScreen(barcode = it1) }
             }
         }
     }
@@ -187,24 +210,6 @@ sealed class NavManager {
         override val routeType: RouteType = RouteType.FREE_ACCESS,
         override val category: NavRouteCategory = NavRouteCategory.FOOD,
         override val extras: List<String> = emptyList()
-    ) : NavManager() {
-        override fun addRoute(
-            navGraphBuilder: NavGraphBuilder,
-            navController: NavController,
-            topModel: FoodBroActivityModel
-        ) {
-            navGraphBuilder.composable(screenName) {
-                Text(text = "UserList")
-            }
-        }
-    }
-
-    data class OpenFoodFactScreen(
-        override val iconID: Int = R.drawable.twotone_food_bank_24,
-        override val screenName: String = "OpenFoodFactScreens",
-        override val routeType: RouteType = RouteType.INTERN,
-        override val category: NavRouteCategory = NavRouteCategory.INTERN,
-        override val extras: List<String> = listOf("barcode")
     ) : NavManager() {
         override fun addRoute(
             navGraphBuilder: NavGraphBuilder,

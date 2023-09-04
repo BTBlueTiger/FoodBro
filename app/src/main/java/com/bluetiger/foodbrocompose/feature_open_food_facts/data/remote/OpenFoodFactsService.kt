@@ -10,7 +10,7 @@ import io.ktor.client.features.logging.Logging
 
 interface OpenFoodFactsService {
 
-    suspend fun getFoodFactsByBarcode(barcode: String): OpenFoodFactsResponse?
+    suspend fun getFoodFactsByBarcode(barcode: String): OpenFoodFactsResponse
     companion object {
 
         const val TAG = "OpenFoodFactsService"

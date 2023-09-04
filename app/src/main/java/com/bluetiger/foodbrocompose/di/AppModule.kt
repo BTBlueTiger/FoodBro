@@ -3,6 +3,8 @@ package com.bluetiger.foodbrocompose.di
 import android.app.Application
 import androidx.room.Room
 import com.bluetiger.foodbrocompose.database.room.FoodBroDataBase
+import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repository.OpenFoodFactsRepositoryImpl
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import com.bluetiger.foodbrocompose.feature_user.data.repository.UserRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.AddUser
@@ -33,6 +35,12 @@ object AppModule {
             FoodBroDataBase.DATABASE_NAME
         ).fallbackToDestructiveMigration()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOpenFoodFactsRepository(db: FoodBroDataBase) : OpenFoodFactsRepository {
+        return OpenFoodFactsRepositoryImpl(db.foodFactsDao)
     }
 
     @Provides

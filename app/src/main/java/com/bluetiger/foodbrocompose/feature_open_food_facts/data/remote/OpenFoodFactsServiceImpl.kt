@@ -10,15 +10,18 @@ class OpenFoodFactsServiceImpl(
     private val client: HttpClient
 ) : OpenFoodFactsService {
 
-    override suspend fun getFoodFactsByBarcode(barcode: String): OpenFoodFactsResponse? {
+    override suspend fun getFoodFactsByBarcode(barcode: String): OpenFoodFactsResponse {
         return try {
             client.get {
                 url(OpenFoodFactsRoutes.Barcode(barcode).getUrlBuilder())
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Log.e(OpenFoodFactsService.TAG, e.message.toString())
-            null
+            OpenFoodFactsResponse(
+                barcode,
+                null,
+                0
+            )
         }
     }
-
 }

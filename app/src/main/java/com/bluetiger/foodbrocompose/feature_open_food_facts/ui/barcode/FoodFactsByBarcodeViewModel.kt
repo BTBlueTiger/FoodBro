@@ -1,7 +1,5 @@
 package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
@@ -10,25 +8,24 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.R
+import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repository.OpenFoodFactsResponseExtractor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFoodFactsService
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
-import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.extractor.OpenFoodFactsResponseExtractorImpl
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
 class FoodFactsByBarcodeViewModel @Inject constructor(
     private val permissionUseCases: PermissionUseCases,
+    private val foodFactsRepository: OpenFoodFactsRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -57,11 +54,8 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
     private val _floatingButtonImage = mutableIntStateOf(R.drawable.baseline_camera_24)
     val floatingButtonImage: State<Int> = _floatingButtonImage
 
-    private val _response: MutableState<OpenFoodFactsResponse?> = mutableStateOf(null)
-    val response: State<OpenFoodFactsResponse?> = _response
-
-    private val _painterUrl = mutableStateOf<String>("")
-    val painterUrl: State<String> = _painterUrl
+    private val _response: MutableState<OpenFoodFactsData> = mutableStateOf(OpenFoodFactsData( ))
+    val response: State<OpenFoodFactsData> = _response
 
 
     private val _barcode = mutableStateOf(
@@ -109,6 +103,16 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
 
             is FoodFactsByBarcodeEvents.BarcodeResponseRequest -> {
 
+                if (barcode.value.isValid) {
+                    viewModelScope.launch {
+                        val response = OpenFoodFactsService.create()
+                            .getFoodFactsByBarcode(barcode = _barcode.value.value)
+                        val data = OpenFoodFactsResponseExtractor.createData(response)
+                        _response.value = data
+                        foodFactsRepository.insertOpenFoodFactsResponse(data)
+                    }
+                }
+
                 this._barcode.value = barcode.value.copy(
                     value = "",
                     isError = false,
@@ -119,7 +123,6 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun checkValue(value: String): ConditionOutlineTextFieldPack<String> {
         var colors: OutlineTextFieldColorCases = OutlineTextFieldColorCases.DEFAULT

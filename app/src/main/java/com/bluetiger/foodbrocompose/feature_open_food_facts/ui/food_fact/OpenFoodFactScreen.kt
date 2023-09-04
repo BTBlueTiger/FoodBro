@@ -37,13 +37,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
 import com.bluetiger.foodbrocompose.ui.common.components.async_image.AsyncImage
 import com.bluetiger.foodbrocompose.ui.common.components.headline.HeadLine
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FoodFactScreen(
     barcode: String,
-    viewModel: OpenFoodFactViewModel = OpenFoodFactViewModel(barcode)
+    viewModel: OpenFoodFactViewModel = hiltViewModel()
 ) {
 
     val productGeneralState = viewModel.productGeneral.value
