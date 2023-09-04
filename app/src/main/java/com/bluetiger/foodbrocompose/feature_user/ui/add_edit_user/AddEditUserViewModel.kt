@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEditUserViewModel @Inject constructor(
     private val userUseCases: UserUseCases
-) : ViewModel(), FBPreferences.IPreferenceAble {
+) : ViewModel() {
 
     private val TAG = "AddEditUser"
 
@@ -141,9 +141,6 @@ class AddEditUserViewModel @Inject constructor(
                             success = true,
                             snackBarMessage = null
                         )
-
-                        setUserIsSet(true)
-                        setUser(email.value.value)
 
                     } else {
                         _onSaveUserRequest.value = onSaveUserRequest.value.copy(

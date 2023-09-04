@@ -42,16 +42,22 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodFactScreen(
-    barcode: String,
+fun OpenFoodFactScreen(
     viewModel: OpenFoodFactViewModel = hiltViewModel()
 ) {
 
-    val productGeneralState = viewModel.productGeneral.value
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
-    if (productGeneralState != null)
+    Log.e("", viewModel.openFoodFactsData.value.toString())
+
+    if (viewModel.openFoodFactsData.value.status == 0) {
+        Log.e("OpenFoodFactsBarcodeState", "NULL")
+    } else {
+
+        val brands = viewModel.getBrands()
+        val imageUrl = viewModel.getImageUrl()
+
         Card(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,14 +67,15 @@ fun FoodFactScreen(
             )
         ) {
             Row {
-                HeadLine(headline = productGeneralState.brands)
+                HeadLine(headline = brands ?: "No Brands")
             }
+
             AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.3f)
                     .clip(shape = RoundedCornerShape(size = 12.dp)),
-                url = productGeneralState.imageUrl,
+                url = imageUrl?: "https://commons.wikimedia.org/wiki/File:No_image_available.svg",
                 contentScale = ContentScale.Crop
             )
             BottomSheetScaffold(
@@ -106,6 +113,7 @@ fun FoodFactScreen(
             }
 
         }
+    }
 }
 
 @Composable

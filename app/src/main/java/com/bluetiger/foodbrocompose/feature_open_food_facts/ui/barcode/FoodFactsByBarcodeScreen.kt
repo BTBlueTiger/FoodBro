@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.BarcodeScannerVideoView
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextField
 import kotlinx.coroutines.launch
@@ -60,7 +61,9 @@ fun FoodFactsByBarcodeScreen(
                     actionLabel = "Show",
                     withDismissAction = true
                 ).also {
-                    if (it == SnackbarResult.ActionPerformed){
+                    if (it == SnackbarResult.ActionPerformed) {
+                        FBPreferences.getInstance()
+                            .setDesiredOpenFoodFactsData(responseState.timeStamp)
                         navigateToOpenFoodFacts(responseState.barcode)
                     }
                 }

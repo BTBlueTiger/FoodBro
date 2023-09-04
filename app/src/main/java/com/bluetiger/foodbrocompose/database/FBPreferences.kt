@@ -37,7 +37,7 @@ class FBPreferences private constructor() {
 
 
     enum class PreferenceTask {
-        USER_IS_SET, USER_EMAIL
+        DESIRED_BARCODE
     }
 
     companion object : SimpleSingletonHolder<FBPreferences>(::FBPreferences)
@@ -53,54 +53,9 @@ class FBPreferences private constructor() {
     private fun getPreferenceEditor() =
         getPreferences().edit()
 
-    private val _userIsSet = mutableStateOf(false)
-    val userIsSet: State<Boolean> = _userIsSet
-
-
-    fun setUserIsSet(boolean: Boolean) {
-        FBPreferences.getInstance().getPreferenceEditor()
-            .putBoolean(PreferenceTask.USER_IS_SET.name, boolean).apply()
-        _userIsSet.value = true
-    }
-
-    fun getUserIsSet() =
-        FBPreferences.getInstance().getPreferences()
-            .getBoolean(PreferenceTask.USER_IS_SET.name, false)
-
-    fun setUser(userEmail: String) {
-        FBPreferences.getInstance().getPreferenceEditor()
-            .putString(PreferenceTask.USER_EMAIL.name, userEmail)
-            .apply()
-    }
-
-    fun getUser(): String {
-        return FBPreferences.getInstance().getPreferences()
-            .getString(PreferenceTask.USER_EMAIL.name, "") ?: ""
-    }
-
-    interface IPreferenceAble {
-
-
-        fun setUserIsSet(boolean: Boolean) {
-            FBPreferences.getInstance().getPreferenceEditor()
-                .putBoolean(PreferenceTask.USER_IS_SET.name, boolean).apply()
-        }
-
-        fun getUserIsSet() =
-            FBPreferences.getInstance().getPreferences()
-                .getBoolean(PreferenceTask.USER_IS_SET.name, false)
-
-        fun setUser(userEmail: String) {
-            FBPreferences.getInstance().getPreferenceEditor()
-                .putString(PreferenceTask.USER_EMAIL.name, userEmail)
-                .apply()
-        }
-
-        fun getUser() {
-            FBPreferences.getInstance().getPreferences()
-                .getString(PreferenceTask.USER_EMAIL.name, "")
-        }
-    }
+    fun setDesiredOpenFoodFactsData(timestamp: Long) =
+        getPreferenceEditor().putLong(PreferenceTask.DESIRED_BARCODE.name, timestamp).apply()
+    fun getDesiredOpenFoodFactsData() = getPreferences().getLong(PreferenceTask.DESIRED_BARCODE.name, 0)
 
 }
 

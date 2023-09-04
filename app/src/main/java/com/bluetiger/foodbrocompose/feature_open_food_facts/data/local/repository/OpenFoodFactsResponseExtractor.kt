@@ -28,10 +28,9 @@ abstract class OpenFoodFactsResponseExtractor {
                 return OpenFoodFactsData(0, openFoodFactsResponse.code)
             }
             val extractor = OpenFoodFactsResponseExtractorImpl(openFoodFactsResponse)
-            Log.e("Nutriscore", openFoodFactsResponse.product!!["nutriscore_data"].toString())
             return OpenFoodFactsData(
                 barcode = openFoodFactsResponse.code,
-                status = 0,
+                status = 1,
                 nutrientLevels = extractor.getNutrientLevels(),
                 ecoScoreData = extractor.getEcoScoreData(),
                 nutriments = extractor.getNutriments(),

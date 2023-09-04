@@ -1,6 +1,5 @@
 package com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository
 
-import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,7 @@ abstract class OpenFoodFactsRepository {
         _flowFoodFactResponse.value = openFoodFactsData
     }
 
-    abstract fun getResponses(): Flow<List<OpenFoodFactsData>>
-    abstract suspend fun getResponseByBarcode(barcode: String): OpenFoodFactsData
-    abstract suspend fun insertOpenFoodFactsResponse(response: OpenFoodFactsData)
+    abstract fun getOpenFoodFactsResponses(): Flow<List<OpenFoodFactsData>>
+    abstract suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData
+    abstract suspend fun insertOpenFoodFacts(response: OpenFoodFactsData)
 }

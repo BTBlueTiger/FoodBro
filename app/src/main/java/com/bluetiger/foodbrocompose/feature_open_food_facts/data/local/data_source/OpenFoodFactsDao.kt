@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OpenFoodFactsDao : BaseDao<OpenFoodFactsData> {
 
-    @Query("SELECT * FROM OpenFoodFactsResponses WHERE barcode = :barcode")
-    suspend fun getOpenFoodFactsByBarcode(barcode: String) : OpenFoodFactsData
+    @Query("SELECT * FROM OpenFoodFactsResponses WHERE timeStamp = :timeStamp")
+    suspend fun getOpenFoodFactsByTimeStamp(timeStamp: Long) : OpenFoodFactsData
 
     @Query("SELECT * FROM OpenFoodFactsResponses")
     fun getAllFoodFactsResponses(): Flow<List<OpenFoodFactsData>>

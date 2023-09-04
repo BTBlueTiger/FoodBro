@@ -1,9 +1,13 @@
 package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bluetiger.foodbrocompose.database.FBPreferences
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneral
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,25 +16,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OpenFoodFactViewModel @Inject constructor(
-    private val foodFactsRepository: OpenFoodFactsRepository
+    private val foodFactsRepository: OpenFoodFactsRepository,
+    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val _openFoodFactsData = mutableStateOf(OpenFoodFactsData())
+    val openFoodFactsData : State<OpenFoodFactsData> = _openFoodFactsData
 
-    private val _productGeneral = mutableStateOf<ProductGeneral?>(null)
-    val productGeneral: State<ProductGeneral?> = _productGeneral
+
+    fun getBrands() = openFoodFactsData.value.productGeneral?.brands
+    fun getImageUrl() = openFoodFactsData.value.productGeneral?.imageUrl
 
     init {
-        this.viewModelScope.launch {
-            /*
-            val response = OpenFoodFactsService.create().getFoodFactsByBarcode(barcode)
-            if(response != null){
-                extractor = OpenFoodFactsResponseExtractorImpl(response)
-                val generalProduct = extractor.getGeneralProduct()
-                if(generalProduct != null)
-                    _productGeneral.value = generalProduct
-            }
-
-             */
+        val desiredBarcode = FBPreferences.getInstance().getDesiredOpenFoodFactsData()
+        viewModelScope.launch {
+            _openFoodFactsData.value =
+                foodFactsRepository.getOpenFoodFactResponseByTimeStamp(desiredBarcode)
         }
     }
 

@@ -3,11 +3,10 @@ package com.bluetiger.foodbrocompose.main_activity
 import androidx.compose.material3.Text
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.FoodFactScreen
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.OpenFoodFactScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.user_list.UserListScreen
 
@@ -160,12 +159,12 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
-                FoodFactsByBarcodeScreen(navigateToOpenFoodFacts = { navController.navigate(OpenFoodFactScreen().screenName + "/$it") })
+                FoodFactsByBarcodeScreen(navigateToOpenFoodFacts = { navController.navigate(OpenFoodFact().screenName + "/$it") })
             }
         }
     }
 
-    data class OpenFoodFactScreen(
+    data class OpenFoodFact(
         override val iconID: Int = R.drawable.twotone_food_bank_24,
         override val screenName: String = "OpenFoodFactScreens",
         override val routeType: RouteType = RouteType.INTERN,
@@ -177,11 +176,8 @@ sealed class NavManager {
             navController: NavController,
             topModel: FoodBroActivityModel
         ) {
-            navGraphBuilder.composable(screenName) {
-                Text(text = "UserList")
-            }
-            navGraphBuilder.composable("$screenName/{barcode}"){
-                it.arguments?.getString("barcode")?.let { it1 -> FoodFactScreen(barcode = it1) }
+            navGraphBuilder.composable("$screenName/{barcode}") {
+                OpenFoodFactScreen()
             }
         }
     }
@@ -249,7 +245,7 @@ sealed class NavManager {
         private val foodFactsByBarcode = FoodFactsByBarcode()
         private val foodList = FoodList()
         private val foodPrediction = FoodPrediction()
-        private val openFoodFactScreen = OpenFoodFactScreen()
+        private val openFoodFactScreen = OpenFoodFact()
         private val scans = Scans()
 
 

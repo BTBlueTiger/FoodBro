@@ -12,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repository.OpenFoodFactsResponseExtractor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFoodFactsService
-import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
@@ -26,7 +25,7 @@ import javax.inject.Inject
 class FoodFactsByBarcodeViewModel @Inject constructor(
     private val permissionUseCases: PermissionUseCases,
     private val foodFactsRepository: OpenFoodFactsRepository,
-    private val savedStateHandle: SavedStateHandle
+    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private enum class FloatingButtonImage(val imageId: Int) {
@@ -109,7 +108,7 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                             .getFoodFactsByBarcode(barcode = _barcode.value.value)
                         val data = OpenFoodFactsResponseExtractor.createData(response)
                         _response.value = data
-                        foodFactsRepository.insertOpenFoodFactsResponse(data)
+                        foodFactsRepository.insertOpenFoodFacts(data)
                     }
                 }
 
