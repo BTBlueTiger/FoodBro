@@ -5,12 +5,20 @@ import androidx.room.Room
 import com.bluetiger.foodbrocompose.database.room.FoodBroDataBase
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repository.OpenFoodFactsRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.GetLastOpenFoodFactData
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.GetOpenFoodFactByTimeStamp
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.GetOpenFoodFactsByUser
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.InsertOpenFoodFact
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.SetLastOpenFoodFactData
 import com.bluetiger.foodbrocompose.feature_user.data.repository.UserRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.AddUser
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.DeleteUser
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.GetCurrentUser
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.GetUser
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.GetUsers
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.SetCurrentUser
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.permission.data.repository.PermissionRepository
 import com.bluetiger.foodbrocompose.permission.repository.PermissionRepositoryImpl
@@ -45,6 +53,18 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideOpenFoodFactsUseCases(repository: OpenFoodFactsRepository) : OpenFoodFactDataUseCases {
+        return OpenFoodFactDataUseCases(
+            getLastOpenFoodFactData = GetLastOpenFoodFactData(repository),
+            getOpenFoodFactByTimeStamp = GetOpenFoodFactByTimeStamp(repository),
+            getOpenFoodFactsByUser = GetOpenFoodFactsByUser(repository),
+            insertOpenFoodFact = InsertOpenFoodFact(repository),
+            setLastOpenFoodFactData = SetLastOpenFoodFactData(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
     fun providePermissionRepository() : PermissionRepository {
         return PermissionRepositoryImpl()
     }
@@ -67,7 +87,9 @@ object AppModule {
         getUsers = GetUsers(repository),
         deleteUser = DeleteUser(repository),
         addUser = AddUser(repository),
-        getUser = GetUser(repository)
+        getUser = GetUser(repository),
+        getCurrentUser = GetCurrentUser(repository),
+        setCurrentUser = SetCurrentUser(repository)
     )
 
 }

@@ -66,7 +66,7 @@ sealed class NavManager {
             navGraphBuilder.composable(screenName) {
                 UserListScreen(navigateToHome = {
                     navController.navigate(Home().screenName)
-                }, topModel)
+                })
             }
         }
     }

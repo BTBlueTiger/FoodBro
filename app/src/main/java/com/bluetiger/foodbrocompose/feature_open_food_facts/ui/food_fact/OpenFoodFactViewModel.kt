@@ -8,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OpenFoodFactViewModel @Inject constructor(
-    private val foodFactsRepository: OpenFoodFactsRepository,
+    private val foodFactDataUseCases: OpenFoodFactDataUseCases,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,10 +32,10 @@ class OpenFoodFactViewModel @Inject constructor(
             // If -1 is set, the last Response should be taken
             if(desiredFoodData > 0) {
                 _openFoodFactsData.value =
-                    foodFactsRepository.getOpenFoodFactResponseByTimeStamp(desiredFoodData)
+                    foodFactDataUseCases.getOpenFoodFactByTimeStamp(desiredFoodData)
             }
             else {
-                _openFoodFactsData.value = foodFactsRepository.flowFoodFactsResponse.value
+                _openFoodFactsData.value = foodFactDataUseCases.getLastOpenFoodFactData()
             }
         }
     }

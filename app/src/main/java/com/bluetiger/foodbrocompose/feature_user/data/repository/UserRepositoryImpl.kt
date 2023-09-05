@@ -12,8 +12,6 @@ class UserRepositoryImpl(
     private val dao: UserDao
 ): UserRepository() {
 
-
-
     override fun getUsers(): Flow<List<User>> {
         return dao.getAllUser()
     }

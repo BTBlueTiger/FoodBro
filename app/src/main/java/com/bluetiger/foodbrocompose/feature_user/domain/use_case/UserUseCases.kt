@@ -4,5 +4,7 @@ data class UserUseCases(
     val addUser: AddUser,
     val deleteUser: DeleteUser,
     val getUser: GetUser,
-    val getUsers: GetUsers
+    val getUsers: GetUsers,
+    val getCurrentUser: GetCurrentUser,
+    val setCurrentUser: SetCurrentUser
 )

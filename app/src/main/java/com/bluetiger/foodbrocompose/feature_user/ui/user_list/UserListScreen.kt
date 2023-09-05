@@ -34,15 +34,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserListScreen(
     navigateToHome: () -> Unit,
-    topModel: FoodBroActivityModel,
     viewModel: UserListViewModel = hiltViewModel()
 ) {
 
-    val scope = rememberCoroutineScope()
-
     val users by viewModel.getUsers().collectAsState(initial = emptyList())
-
-    Log.e("User", users.toString())
 
     users.forEach {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {

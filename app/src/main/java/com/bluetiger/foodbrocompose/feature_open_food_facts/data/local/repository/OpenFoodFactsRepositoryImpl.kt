@@ -28,7 +28,7 @@ class OpenFoodFactsRepositoryImpl(
     }
 
 
-    override suspend fun insertOpenFoodFacts(response: OpenFoodFactsData) {
+    override suspend fun insertOpenFoodFact(response: OpenFoodFactsData) {
         _lastResponseState.value = response
         dao.insert(response)
     }

@@ -11,12 +11,12 @@ abstract class OpenFoodFactsRepository {
     private val _flowFoodFactResponse = MutableStateFlow(OpenFoodFactsData())
     val flowFoodFactsResponse : StateFlow<OpenFoodFactsData> = _flowFoodFactResponse
 
-    fun setFoodFactsResponse(openFoodFactsData: OpenFoodFactsData){
+    fun setLastOpenFoodFactsResponseData(openFoodFactsData: OpenFoodFactsData){
         _flowFoodFactResponse.value = openFoodFactsData
     }
 
     abstract fun getOpenFoodFactsResponses(): Flow<List<OpenFoodFactsData>>
     abstract fun getOpenFoodFactsResponsesFromUser(user: User): Flow<List<OpenFoodFactsData>>
     abstract suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData
-    abstract suspend fun insertOpenFoodFacts(response: OpenFoodFactsData)
+    abstract suspend fun insertOpenFoodFact(response: OpenFoodFactsData)
 }

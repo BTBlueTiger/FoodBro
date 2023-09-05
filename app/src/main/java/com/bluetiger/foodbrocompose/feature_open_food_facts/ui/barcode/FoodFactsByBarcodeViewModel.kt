@@ -14,20 +14,21 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repositor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFoodFactsService
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FoodFactsByBarcodeViewModel @Inject constructor(
     private val permissionUseCases: PermissionUseCases,
-    private val foodFactsRepository: OpenFoodFactsRepository,
-    private val userRepository: UserRepository,
+    private val foodFactDataUseCases: OpenFoodFactDataUseCases,
+    private val userUseCases: UserUseCases,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -111,9 +112,9 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                             .getFoodFactsByBarcode(barcode = _barcode.value.value)
                         val data = OpenFoodFactsResponseExtractor.createData(response)
                         _response.value = data
-                        foodFactsRepository.setFoodFactsResponse(data)
-                        if (userRepository.flowUser.value != null) {
-                            foodFactsRepository.insertOpenFoodFacts(data.copy(userMail = userRepository.flowUser.value!!.email))
+                        foodFactDataUseCases.setLastOpenFoodFactData(data)
+                        if (userUseCases.getCurrentUser.notNull()) {
+                            foodFactDataUseCases.insertOpenFoodFact(data.copy(userMail = userUseCases.getCurrentUser()!!.email))
                         }
                     }
                 }
