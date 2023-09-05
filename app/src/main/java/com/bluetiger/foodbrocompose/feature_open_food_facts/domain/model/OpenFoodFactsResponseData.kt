@@ -14,6 +14,7 @@ data class OpenFoodFactsData(
     val status: Int = 0,
     val barcode: String = "",
     val timeStamp: Long = System.currentTimeMillis(),
+    val userMail: String = "",
     val nutriScoreData: NutriScoreData? = null,
     val ecoScoreData: EcoScoreData? = null,
     val productGeneral: ProductGeneral? = null,

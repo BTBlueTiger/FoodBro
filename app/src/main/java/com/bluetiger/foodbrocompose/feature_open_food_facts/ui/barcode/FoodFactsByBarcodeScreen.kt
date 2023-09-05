@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 fun FoodFactsByBarcodeScreen(
     viewModel: FoodFactsByBarcodeViewModel = hiltViewModel(),
-    navigateToOpenFoodFacts: (String) -> Unit
+    navigateToOpenFoodFacts: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -63,8 +63,8 @@ fun FoodFactsByBarcodeScreen(
                 ).also {
                     if (it == SnackbarResult.ActionPerformed) {
                         FBPreferences.getInstance()
-                            .setDesiredOpenFoodFactsData(responseState.timeStamp)
-                        navigateToOpenFoodFacts(responseState.barcode)
+                            .setDesiredOpenFoodFactsData(-1)
+                        navigateToOpenFoodFacts()
                     }
                 }
             }

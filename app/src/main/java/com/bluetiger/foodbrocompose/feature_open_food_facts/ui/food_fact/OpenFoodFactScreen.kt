@@ -49,14 +49,13 @@ fun OpenFoodFactScreen(
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
-    Log.e("", viewModel.openFoodFactsData.value.toString())
 
     if (viewModel.openFoodFactsData.value.status == 0) {
         Log.e("OpenFoodFactsBarcodeState", "NULL")
     } else {
 
         val brands = viewModel.getBrands()
-        val imageUrl = viewModel.getImageUrl()
+        val imageByteArray = viewModel.getImageUrl()
 
         Card(
             modifier = Modifier
@@ -70,14 +69,16 @@ fun OpenFoodFactScreen(
                 HeadLine(headline = brands ?: "No Brands")
             }
 
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.3f)
-                    .clip(shape = RoundedCornerShape(size = 12.dp)),
-                url = imageUrl?: "https://commons.wikimedia.org/wiki/File:No_image_available.svg",
-                contentScale = ContentScale.Crop
-            )
+            if (imageByteArray != null) {
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.3f)
+                        .clip(shape = RoundedCornerShape(size = 12.dp)),
+                    byteArray = imageByteArray,
+                    contentScale = ContentScale.Crop
+                )
+            }
             BottomSheetScaffold(
                 scaffoldState = scaffoldState,
                 sheetPeekHeight = 28.dp,

@@ -14,10 +14,12 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repositor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFoodFactsService
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class FoodFactsByBarcodeViewModel @Inject constructor(
     private val permissionUseCases: PermissionUseCases,
     private val foodFactsRepository: OpenFoodFactsRepository,
+    private val userRepository: UserRepository,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -53,7 +56,7 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
     private val _floatingButtonImage = mutableIntStateOf(R.drawable.baseline_camera_24)
     val floatingButtonImage: State<Int> = _floatingButtonImage
 
-    private val _response: MutableState<OpenFoodFactsData> = mutableStateOf(OpenFoodFactsData( ))
+    private val _response: MutableState<OpenFoodFactsData> = mutableStateOf(OpenFoodFactsData())
     val response: State<OpenFoodFactsData> = _response
 
 
@@ -108,7 +111,10 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                             .getFoodFactsByBarcode(barcode = _barcode.value.value)
                         val data = OpenFoodFactsResponseExtractor.createData(response)
                         _response.value = data
-                        foodFactsRepository.insertOpenFoodFacts(data)
+                        foodFactsRepository.setFoodFactsResponse(data)
+                        if (userRepository.flowUser.value != null) {
+                            foodFactsRepository.insertOpenFoodFacts(data.copy(userMail = userRepository.flowUser.value!!.email))
+                        }
                     }
                 }
 

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.OpenFoodFactScreen
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.last_scans.LastScansList
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
 import com.bluetiger.foodbrocompose.feature_user.ui.user_list.UserListScreen
 
@@ -159,7 +160,7 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
-                FoodFactsByBarcodeScreen(navigateToOpenFoodFacts = { navController.navigate(OpenFoodFact().screenName + "/$it") })
+                FoodFactsByBarcodeScreen(navigateToOpenFoodFacts = { navController.navigate(OpenFoodFact().screenName) })
             }
         }
     }
@@ -176,7 +177,7 @@ sealed class NavManager {
             navController: NavController,
             topModel: FoodBroActivityModel
         ) {
-            navGraphBuilder.composable("$screenName/{barcode}") {
+            navGraphBuilder.composable(screenName) {
                 OpenFoodFactScreen()
             }
         }
@@ -231,7 +232,9 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
-                Text(text = "UserList")
+                LastScansList {
+                    navController.navigate(OpenFoodFact().screenName)
+                }
             }
         }
     }

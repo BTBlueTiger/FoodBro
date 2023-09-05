@@ -79,6 +79,7 @@ fun AddEditUserScreen(
             FloatingActionButton(
                 onClick = {
                     scope.launch {
+                        Log.e("RegisterEvent", "test")
                         viewModel.onEvent(AddEditUserEvent.SaveUser)
                         if(onSaveUserRequest.success){
                             navigateToHome()
@@ -169,6 +170,7 @@ fun AddEditUserScreen(
                                 placeholder = { Text(text = "28.08.1995") },
                                 modifier = Modifier,
                                 onValueChange = {
+                                    Log.e("Time", it.toString())
                                     viewModel.onEvent(
                                         AddEditUserEvent.EnteredValue(
                                             it,

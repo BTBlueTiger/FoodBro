@@ -51,3 +51,30 @@ fun AsyncImage(modifier: Modifier, url: String?, contentScale: ContentScale) {
         )
 
 }
+
+@Composable
+fun AsyncImage(modifier: Modifier, byteArray: ByteArray, contentScale: ContentScale) {
+
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+
+    LaunchedEffect(null) {
+        try {
+            val pendingBitmap = withContext(Dispatchers.IO) {
+                BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            }
+            bitmap.value = pendingBitmap
+        } catch (e: Exception) {
+            Log.e("AsyncImage", e.message.toString())
+        }
+    }
+
+
+    if (bitmap.value != null)
+        Image(
+            modifier = modifier,
+            bitmap = bitmap.value!!.asImageBitmap(),
+            contentDescription = "",
+            contentScale = contentScale
+        )
+}

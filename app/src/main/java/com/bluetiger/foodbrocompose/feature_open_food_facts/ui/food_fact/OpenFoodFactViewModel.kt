@@ -1,6 +1,5 @@
 package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -8,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
-import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneral
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,13 +23,19 @@ class OpenFoodFactViewModel @Inject constructor(
 
 
     fun getBrands() = openFoodFactsData.value.productGeneral?.brands
-    fun getImageUrl() = openFoodFactsData.value.productGeneral?.imageUrl
+    fun getImageUrl() : ByteArray? = openFoodFactsData.value.productGeneral?.imageByteArray
 
     init {
-        val desiredBarcode = FBPreferences.getInstance().getDesiredOpenFoodFactsData()
+        val desiredFoodData = FBPreferences.getInstance().getDesiredOpenFoodFactsData()
         viewModelScope.launch {
-            _openFoodFactsData.value =
-                foodFactsRepository.getOpenFoodFactResponseByTimeStamp(desiredBarcode)
+            // If -1 is set, the last Response should be taken
+            if(desiredFoodData > 0) {
+                _openFoodFactsData.value =
+                    foodFactsRepository.getOpenFoodFactResponseByTimeStamp(desiredFoodData)
+            }
+            else {
+                _openFoodFactsData.value = foodFactsRepository.flowFoodFactsResponse.value
+            }
         }
     }
 

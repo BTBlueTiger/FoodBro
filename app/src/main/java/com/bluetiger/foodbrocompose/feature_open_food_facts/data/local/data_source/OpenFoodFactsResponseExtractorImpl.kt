@@ -4,11 +4,16 @@ import android.util.Log
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repository.OpenFoodFactsResponseExtractor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.dto.OpenFoodFactsResponse
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.ecoscore.EcoScoreData
-import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data.NutriScoreData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutrient_levels.NutrientLevels
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriments.Nutriments
+import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data.NutriScoreData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneral
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.DeserializationStrategy
+import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.net.URL
 
 class OpenFoodFactsResponseExtractorImpl(private val openFoodFactsResponse: OpenFoodFactsResponse) :
     OpenFoodFactsResponseExtractor() {
@@ -28,12 +33,49 @@ class OpenFoodFactsResponseExtractorImpl(private val openFoodFactsResponse: Open
         return null
     }
 
-    override fun getGeneralProduct(): ProductGeneral {
+    private suspend fun String.fetchImageUrlToByteArray(): ByteArray {
+        return try {
+            val url = URL(this)
+            val connection = withContext(Dispatchers.IO) {
+                url.openConnection()
+            }
+            withContext(Dispatchers.IO) {
+                connection.connect()
+
+                // Input stream to read the image data
+                val inputStream = BufferedInputStream(url.openStream())
+
+                // ByteArrayOutputStream to store the image data
+                val outputStream = ByteArrayOutputStream()
+
+                // Read the image data into a byte array
+                val buffer = ByteArray(1024)
+                var bytesRead: Int
+                while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
+
+                // Close the streams
+                inputStream.close()
+                outputStream.close()
+                // Get the byte array (blob) containing the image data
+                outputStream.toByteArray()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ByteArray(0)
+        }
+    }
+
+
+
+    override suspend fun getGeneralProduct(): ProductGeneral {
+
         return ProductGeneral(
             foodGroups = valueOf("food_groups"),
             brands = valueOf("brands"),
             categories = valueOf("categories"),
-            imageUrl = valueOf("image_url"),
+            imageByteArray = valueOf("image_url").fetchImageUrlToByteArray(),
             packaging = valueOf("packaging")
         )
     }

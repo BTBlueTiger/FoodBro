@@ -61,7 +61,7 @@ fun DatePickerTextField(
 
     OutlinedTextField(
         value = ConverterUtility.longToDate(value),
-        onValueChange = { onValueChange(time) },
+        onValueChange = {  },
         label = { label?.invoke() },
         placeholder = { placeholder?.invoke() },
         leadingIcon = { leadingIcon?.invoke() },
@@ -93,7 +93,7 @@ fun DatePickerTextField(
     )
     if (showDialog) {
         DatePickerDialog(
-            onSelected = { time = it },
+            onSelected = { onValueChange(it) },
             onDismissRequest = { showDialog = false }
         )
     }

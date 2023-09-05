@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 
 abstract class OpenFoodFactsResponseExtractor {
     abstract fun getNutriments(): Nutriments?
-    abstract fun getGeneralProduct(): ProductGeneral?
+    abstract suspend fun getGeneralProduct(): ProductGeneral?
     abstract fun getNutriScoreData(): NutriScoreData?
     abstract fun getNutrientLevels(): NutrientLevels?
     abstract fun getEcoScoreData(): EcoScoreData?
@@ -23,7 +23,7 @@ abstract class OpenFoodFactsResponseExtractor {
     val jsonConfig = Json { ignoreUnknownKeys = true }
 
     companion object {
-        fun createData(openFoodFactsResponse: OpenFoodFactsResponse): OpenFoodFactsData {
+        suspend fun createData(openFoodFactsResponse: OpenFoodFactsResponse): OpenFoodFactsData {
             if (openFoodFactsResponse.status == 0) {
                 return OpenFoodFactsData(0, openFoodFactsResponse.code)
             }

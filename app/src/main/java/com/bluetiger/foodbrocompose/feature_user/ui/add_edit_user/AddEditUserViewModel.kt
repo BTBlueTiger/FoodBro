@@ -127,16 +127,16 @@ class AddEditUserViewModel @Inject constructor(
                         _birthday.isValid(User.ValueType.BIRTHDAY, birthday)
                     ) {
 
-
-                        userUseCases.addUser(
-                            User(
-                                email = email.value.value,
-                                height = height.value.value,
-                                weight = weight.value.value,
-                                gender = gender.value.value,
-                                birthday = birthday.value.value
-                            )
+                        val user = User(
+                            email = email.value.value,
+                            height = height.value.value,
+                            weight = weight.value.value,
+                            gender = gender.value.value,
+                            birthday = birthday.value.value
                         )
+                        userUseCases.addUser(user)
+
+
                         _onSaveUserRequest.value = onSaveUserRequest.value.copy(
                             success = true,
                             snackBarMessage = null

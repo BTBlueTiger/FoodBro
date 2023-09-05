@@ -1,5 +1,6 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.user_list
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,8 @@ fun UserListScreen(
     val scope = rememberCoroutineScope()
 
     val users by viewModel.getUsers().collectAsState(initial = emptyList())
+
+    Log.e("User", users.toString())
 
     users.forEach {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
