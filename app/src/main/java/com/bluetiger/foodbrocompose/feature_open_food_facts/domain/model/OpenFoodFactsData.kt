@@ -10,9 +10,9 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product
 
 @Entity(tableName = "OpenFoodFactsResponses")
 data class OpenFoodFactsData(
-    @PrimaryKey
     val status: Int = 0,
     val barcode: String = "",
+    @PrimaryKey
     val timeStamp: Long = System.currentTimeMillis(),
     val userMail: String = "",
     val nutriScoreData: NutriScoreData? = null,

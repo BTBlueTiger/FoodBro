@@ -2,9 +2,8 @@ package com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_text
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import com.example.compose.Color
+import com.bluetiger.foodbrocompose.ui.theme.Color
 
 sealed class OutlineTextFieldColorCases {
 

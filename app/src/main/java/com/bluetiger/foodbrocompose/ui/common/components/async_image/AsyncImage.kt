@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,7 +52,6 @@ fun AsyncImage(modifier: Modifier, url: String?, contentScale: ContentScale) {
         )
 
 }
-
 @Composable
 fun AsyncImage(modifier: Modifier, byteArray: ByteArray, contentScale: ContentScale) {
 

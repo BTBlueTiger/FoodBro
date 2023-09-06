@@ -18,7 +18,7 @@ import com.bluetiger.foodbrocompose.feature_user.domain.model.User
         User::class,
         OpenFoodFactsData::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(

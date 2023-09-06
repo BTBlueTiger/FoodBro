@@ -113,8 +113,14 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                         val data = OpenFoodFactsResponseExtractor.createData(response)
                         _response.value = data
                         foodFactDataUseCases.setLastOpenFoodFactData(data)
-                        if (userUseCases.getCurrentUser.notNull()) {
-                            foodFactDataUseCases.insertOpenFoodFact(data.copy(userMail = userUseCases.getCurrentUser()!!.email))
+                        if (userUseCases.getCurrentUser() != null) {
+                            Log.e("User not null", data.timeStamp.toString())
+                            foodFactDataUseCases.insertOpenFoodFact(
+                                data.copy(
+                                    timeStamp = System.currentTimeMillis(),
+                                    userMail = userUseCases.getCurrentUser()!!.email
+                                )
+                            )
                         }
                     }
                 }
