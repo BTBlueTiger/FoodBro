@@ -3,6 +3,7 @@ package com.bluetiger.foodbrocompose.database.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.bluetiger.foodbrocompose.database.room.common.SerializeAbleListConverter
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.data_source.OpenFoodFactsDao
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.ecoscore.EcoScoreDataConverter
@@ -13,13 +14,15 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserDao
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroListDao
+import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
 
 @Database(
     entities = [
         User::class,
-        OpenFoodFactsData::class
+        OpenFoodFactsData::class,
+        FoodBroList::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(
@@ -27,7 +30,8 @@ import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroLi
     NutrientLevelsDataConverter::class,
     NutrimentsDataConverter::class,
     NutriScoreDataConverter::class,
-    ProductGeneralDataConverter::class
+    ProductGeneralDataConverter::class,
+    SerializeAbleListConverter::class
 )
 abstract class FoodBroDataBase : RoomDatabase() {
     abstract val userDao: UserDao
