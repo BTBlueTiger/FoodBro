@@ -18,7 +18,7 @@ abstract class UserRepository {
 
     abstract fun getUsers(): Flow<List<User>>
 
-    abstract suspend fun getUserByEmail(email: String): User?
+    abstract suspend fun getUserByName(name: String): User?
 
     abstract suspend fun insertUser(user: User)
 

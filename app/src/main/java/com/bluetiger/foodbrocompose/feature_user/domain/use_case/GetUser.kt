@@ -6,5 +6,5 @@ import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepositor
 class GetUser(
     private val repository: UserRepository
 ) {
-    suspend operator fun invoke(email: String) : User? = repository.getUserByEmail(email)
+    suspend operator fun invoke(email: String) : User? = repository.getUserByName(email)
 }

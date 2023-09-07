@@ -54,7 +54,7 @@ fun UserListScreen(
                 elevation = CardDefaults.cardElevation(),
             ) {
                 Spacer(modifier = Modifier.height(5.dp))
-                HeadLine(headline = it.email)
+                HeadLine(headline = it.name)
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }

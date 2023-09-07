@@ -117,7 +117,7 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                             foodFactDataUseCases.insertOpenFoodFact(
                                 data.copy(
                                     timeStamp = System.currentTimeMillis(),
-                                    userMail = userUseCases.getCurrentUser()!!.email
+                                    userMail = userUseCases.getCurrentUser()!!.name
                                 )
                             )
                         }

@@ -34,7 +34,6 @@ import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionGrou
 import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionModel
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.DatePickerTextField
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
-import com.bluetiger.foodbrocompose.utility.ConverterUtility
 import kotlinx.coroutines.launch
 
 
@@ -63,7 +62,7 @@ fun AddEditUserScreen(
         viewModel.onEvent(AddEditUserEvent.EditUser(email))
     }
 
-    val emailState = viewModel.email.value
+    val name = viewModel.name.value
     val heightState = viewModel.height.value
     val weightState = viewModel.weight.value
     val genderState = viewModel.gender.value
@@ -112,12 +111,12 @@ fun AddEditUserScreen(
                         // Email
                         Row(Modifier.fillMaxWidth()) {
                             ColorStateOutlineTextFieldBuilder(
-                                state = emailState,
+                                state = name,
                                 onValueChange = {
                                     viewModel.onEvent(
-                                        AddEditUserEvent.EnteredValue(it, User.ValueType.EMAIL)
+                                        AddEditUserEvent.EnteredValue(it, User.ValueType.NAME)
                                     )
-                                }, valueType = User.ValueType.EMAIL
+                                }, valueType = User.ValueType.NAME
                             )
                         },
                         // Height
