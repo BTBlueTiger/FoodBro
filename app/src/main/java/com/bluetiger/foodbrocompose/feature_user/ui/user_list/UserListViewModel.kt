@@ -1,10 +1,8 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.user_list
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.database.FBPreferences.Companion.getInstance
-import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -15,7 +15,7 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFood
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
-import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserFoodBroRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
