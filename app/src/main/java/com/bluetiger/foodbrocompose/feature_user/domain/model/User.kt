@@ -6,14 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user")
 data class User(
-    @PrimaryKey val email: String,
+    @PrimaryKey val name: String,
     @ColumnInfo(name = "birthday") val birthday: Long,
     @ColumnInfo(name = "height") val height: Int,
     @ColumnInfo(name = "Weight") val weight: Int,
     @ColumnInfo(name = "gender") val gender: Gender
 ) {
     enum class ValueType(val label: String, val placeHolder: String = "", val unit: String = "") {
-        EMAIL("Email", "example@gmx.com"),
+        NAME("Name", "Peter"),
         HEIGHT("Height", "180", " cm"),
         WEIGHT("Weight", "80", " kg"),
         BIRTHDAY("Birthday", "28.08.1995"),

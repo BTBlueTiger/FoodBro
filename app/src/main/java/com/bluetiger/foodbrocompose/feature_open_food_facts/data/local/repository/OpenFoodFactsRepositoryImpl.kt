@@ -20,7 +20,7 @@ class OpenFoodFactsRepositoryImpl(
     }
 
     override fun getOpenFoodFactsResponsesFromUser(user: User): Flow<List<OpenFoodFactsData>> {
-        return dao.getOpenFoodFactResponsesByUser(userMail = user.email)
+        return dao.getOpenFoodFactResponsesByUser(userMail = user.name)
     }
 
     override suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData {

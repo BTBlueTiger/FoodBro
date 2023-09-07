@@ -49,7 +49,6 @@ class FoodBroActivity() : AppCompatActivity() {
         FBPreferences.getInstance().initiate("FoodBro", this)
         setContent {
             AppTheme {
-                //val viewModel = hiltViewModel<OpenApiFactsViewModel>()
                 FoodBro()
             }
         }
@@ -102,14 +101,13 @@ class FoodBroActivity() : AppCompatActivity() {
         val topBarHeadline = remember { mutableStateOf("FoodBro") }
 
         LaunchedEffect(key1 = userState.value){
-          topBarHeadline.value = userState.value?.email ?: "FoodBro"
+          topBarHeadline.value = userState.value?.name ?: "FoodBro"
         }
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val navController = rememberNavController()
         val scope = rememberCoroutineScope()
 
-        Log.e("User", userState.toString())
 
         Scaffold(
             topBar = {

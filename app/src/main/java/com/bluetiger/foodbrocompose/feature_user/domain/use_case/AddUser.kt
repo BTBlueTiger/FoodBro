@@ -10,7 +10,7 @@ class AddUser(
 
     @Throws(User.InvalidUserException::class)
     suspend operator fun invoke(user: User) {
-        if(user.email.isBlank()){
+        if(user.name.isBlank()){
             throw User.InvalidUserException("The email of a user can't be empty.")
         }
         if(user.birthday == 0L){

@@ -7,7 +7,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
@@ -24,8 +23,8 @@ class AddEditUserViewModel @Inject constructor(
 
     private val TAG = "AddEditUser"
 
-    private val _email = mutableStateOf(ConditionOutlineTextFieldPack(""))
-    val email: State<ConditionOutlineTextFieldPack<String>> = _email
+    private val _name = mutableStateOf(ConditionOutlineTextFieldPack(""))
+    val name: State<ConditionOutlineTextFieldPack<String>> = _name
 
     private val _height = mutableStateOf(ConditionOutlineTextFieldPack(0))
     val height: State<ConditionOutlineTextFieldPack<Int>> = _height
@@ -47,10 +46,10 @@ class AddEditUserViewModel @Inject constructor(
 
             is AddEditUserEvent.EditUser -> {
                 this.viewModelScope.launch {
-                    val user = userUseCases.getUser(event.email)
+                    val user = userUseCases.getUser(event.name)
                     if (user != null) {
-                        _email.value = _email.value.copy(
-                            value = user.email
+                        _name.value = _name.value.copy(
+                            value = user.name
                         )
 
                         _height.value = _height.value.copy(
@@ -78,11 +77,11 @@ class AddEditUserViewModel @Inject constructor(
             is AddEditUserEvent.EnteredValue<*> -> {
 
                 when (event.enteredValueType) {
-                    User.ValueType.EMAIL -> {
-                        _email.value = email.value.copy(
+                    User.ValueType.NAME -> {
+                        _name.value = name.value.copy(
                             value = event.value as String,
                         )
-                        _email.checkValue(email)
+                        _name.checkValue(name)
                     }
 
                     User.ValueType.HEIGHT -> {
@@ -120,7 +119,7 @@ class AddEditUserViewModel @Inject constructor(
             is AddEditUserEvent.SaveUser -> {
                 viewModelScope.launch {
 
-                    if (_email.isValid(User.ValueType.EMAIL, email) &&
+                    if (_name.isValid(User.ValueType.NAME, name) &&
                         _height.isValid(User.ValueType.HEIGHT, height) &&
                         _weight.isValid(User.ValueType.WEIGHT, weight) &&
                         _gender.isValid(User.ValueType.GENDER, gender) &&
@@ -128,7 +127,7 @@ class AddEditUserViewModel @Inject constructor(
                     ) {
 
                         val user = User(
-                            email = email.value.value,
+                            name = name.value.value,
                             height = height.value.value,
                             weight = weight.value.value,
                             gender = gender.value.value,
@@ -164,27 +163,19 @@ class AddEditUserViewModel @Inject constructor(
         Log.e(TAG, valueType.toString())
 
         when (valueType) {
-            User.ValueType.EMAIL -> {
-                if ((this.value.value as String).isEmpty()) {
+            User.ValueType.NAME -> {
+                return if ((this.value.value as String).isEmpty()) {
                     this.value = state.value.copy(
                         isError = true,
-                        supportingText = { Text(text = "A email address is required") }
+                        supportingText = { Text(text = "A name is required") }
                     )
-                    return false
-                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(this.value.value as String)
-                        .matches()
-                ) {
-                    this.value = state.value.copy(
-                        isError = true,
-                        supportingText = { Text(text = "This is not a valid email address") }
-                    )
-                    return false
+                    false
                 } else {
                     this.value = state.value.copy(
                         isError = false,
                         supportingText = null
                     )
-                    return true
+                    true
                 }
             }
 
