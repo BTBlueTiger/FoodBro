@@ -14,8 +14,6 @@ abstract class OpenFoodFactsRepository {
     fun setLastOpenFoodFactsResponseData(openFoodFactsData: OpenFoodFactsData){
         _flowFoodFactResponse.value = openFoodFactsData
     }
-
-    abstract fun getOpenFoodFactsResponses(): Flow<List<OpenFoodFactsData>>
     abstract fun getOpenFoodFactsResponsesFromUser(user: User): Flow<List<OpenFoodFactsData>>
     abstract suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData
     abstract suspend fun insertOpenFoodFact(response: OpenFoodFactsData)

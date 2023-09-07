@@ -12,11 +12,6 @@ interface OpenFoodFactsDao : BaseDao<OpenFoodFactsData> {
 
     @Query("SELECT * FROM OpenFoodFactsResponses WHERE timeStamp = :timeStamp")
     suspend fun getOpenFoodFactsByTimeStamp(timeStamp: Long) : OpenFoodFactsData
-
-    @Query("SELECT * FROM OpenFoodFactsResponses WHERE userMail =:userMail")
-    fun getOpenFoodFactResponsesByUser(userMail: String) : Flow<List<OpenFoodFactsData>>
-
-    @Query("SELECT * FROM OpenFoodFactsResponses")
-    fun getAllFoodFactsResponses(): Flow<List<OpenFoodFactsData>>
-
+    @Query("SELECT * FROM OpenFoodFactsResponses WHERE userName =:userName")
+    fun getOpenFoodFactResponsesByUser(userName: String) : Flow<List<OpenFoodFactsData>>
 }

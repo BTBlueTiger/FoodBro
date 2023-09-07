@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 class FoodBroListRepositoryImpl(private val dao: FoodBroListDao) : FoodBroListRepository() {
     override fun getFoodBroListsByUser(user: User): Flow<List<FoodBroList>> {
-        return dao.getFoodBroListByUser(user.email)
+        return dao.getFoodBroListByUser(user.name)
     }
 
     override suspend fun insertFoodBroList(foodBroList: FoodBroList) {
