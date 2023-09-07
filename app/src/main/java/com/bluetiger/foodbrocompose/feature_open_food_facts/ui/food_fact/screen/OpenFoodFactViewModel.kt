@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.database.FBPreferences
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.OpenFoodFactSheet
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets.OpenFoodFactSheet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

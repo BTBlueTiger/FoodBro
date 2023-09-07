@@ -1,11 +1,7 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down
+package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.bluetiger.foodbrocompose.R
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets.OpenFoodFactGeneralSheet
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets.OpenFoodFactNutriScoreSheet
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets.OpenFoodFactNutrientLevelSheet
 
 sealed class OpenFoodFactSheet {
     

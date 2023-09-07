@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down
+package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenu

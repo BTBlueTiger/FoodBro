@@ -40,7 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.OpenFoodFactsDropDown
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.components.drop_down.bottem_sheets.OpenFoodFactsDropDown
 import com.bluetiger.foodbrocompose.ui.common.components.async_image.AsyncImage
 import com.bluetiger.foodbrocompose.ui.common.components.headline.HeadLine
 import kotlinx.coroutines.launch
