@@ -25,7 +25,7 @@ abstract class OpenFoodFactsResponseExtractor {
     companion object {
         suspend fun createData(openFoodFactsResponse: OpenFoodFactsResponse): OpenFoodFactsData {
             if (openFoodFactsResponse.status == 0) {
-                return OpenFoodFactsData(0, openFoodFactsResponse.code)
+                return OpenFoodFactsData(status = 0, barcode = openFoodFactsResponse.code)
             }
             val extractor = OpenFoodFactsResponseExtractorImpl(openFoodFactsResponse)
             return OpenFoodFactsData(

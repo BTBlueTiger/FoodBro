@@ -1,23 +1,20 @@
 package com.bluetiger.foodbrocompose.feature_user.data.repository
 
-import androidx.compose.runtime.mutableStateOf
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserDao
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
-import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserFoodBroRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
-class UserRepositoryImpl(
+class UserFoodBroRepositoryImpl(
     private val dao: UserDao
-): UserRepository() {
+): UserFoodBroRepository() {
 
     override fun getUsers(): Flow<List<User>> {
         return dao.getAllUser()
     }
 
-    override suspend fun getUserByEmail(email: String): User? {
-        return dao.getUserByEmail(email)
+    override suspend fun getUserByName(name: String): User? {
+        return dao.getUserByName(name)
     }
 
     override suspend fun insertUser(user: User) {

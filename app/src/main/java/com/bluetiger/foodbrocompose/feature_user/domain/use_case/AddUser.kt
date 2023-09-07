@@ -2,15 +2,15 @@ package com.bluetiger.foodbrocompose.feature_user.domain.use_case
 
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
-import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserFoodBroRepository
 
 class AddUser(
-    private val repository: UserRepository
+    private val repository: UserFoodBroRepository
 ) {
 
     @Throws(User.InvalidUserException::class)
     suspend operator fun invoke(user: User) {
-        if(user.email.isBlank()){
+        if(user.name.isBlank()){
             throw User.InvalidUserException("The email of a user can't be empty.")
         }
         if(user.birthday == 0L){

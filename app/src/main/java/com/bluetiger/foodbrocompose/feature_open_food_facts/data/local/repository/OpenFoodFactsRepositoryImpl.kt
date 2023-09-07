@@ -15,19 +15,14 @@ class OpenFoodFactsRepositoryImpl(
     private val _lastResponseState = MutableStateFlow(OpenFoodFactsData(0))
     val lastResponse: StateFlow<OpenFoodFactsData> = _lastResponseState
 
-    override fun getOpenFoodFactsResponses(): Flow<List<OpenFoodFactsData>> {
-        return dao.getAllFoodFactsResponses()
-    }
 
     override fun getOpenFoodFactsResponsesFromUser(user: User): Flow<List<OpenFoodFactsData>> {
-        return dao.getOpenFoodFactResponsesByUser(userMail = user.email)
+        return dao.getOpenFoodFactResponsesByUser(userName = user.name)
     }
 
     override suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData {
         return dao.getOpenFoodFactsByTimeStamp(timestamp)
     }
-
-
     override suspend fun insertOpenFoodFact(response: OpenFoodFactsData) {
         _lastResponseState.value = response
         dao.insert(response)

@@ -7,7 +7,7 @@ sealed class AddEditUserEvent {
     data class EnteredValue<T>(val value: T, val enteredValueType: User.ValueType) :
         AddEditUserEvent()
 
-    data class EditUser(val email: String) : AddEditUserEvent()
+    data class EditUser(val name: String) : AddEditUserEvent()
 
     object SaveUser : AddEditUserEvent()
 
