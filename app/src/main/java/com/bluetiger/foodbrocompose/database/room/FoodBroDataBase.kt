@@ -12,6 +12,7 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutrisc
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneralDataConverter
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserDao
 import com.bluetiger.foodbrocompose.feature_user.domain.model.User
+import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroListDao
 
 @Database(
     entities = [
@@ -31,6 +32,7 @@ import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 abstract class FoodBroDataBase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val foodFactsDao: OpenFoodFactsDao
+    abstract val foodBroListDao: FoodBroListDao
 
     companion object {
         val DATABASE_NAME = "FoodBro.db"
