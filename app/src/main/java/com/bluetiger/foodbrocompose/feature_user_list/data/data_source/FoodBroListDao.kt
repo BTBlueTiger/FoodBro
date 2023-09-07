@@ -11,6 +11,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FoodBroListDao : BaseDao<FoodBroList> {
 
-    @Query("SELECT * FROM food_bro_list WHERE userEmail = :email")
-    fun getFoodBroListByUser(email: String) : Flow<List<FoodBroList>>
+    @Query("SELECT * FROM food_bro_list WHERE userName = :name")
+    fun getFoodBroListByUser(name: String) : Flow<List<FoodBroList>>
 }

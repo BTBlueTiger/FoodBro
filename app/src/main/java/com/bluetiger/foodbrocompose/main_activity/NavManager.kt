@@ -227,7 +227,7 @@ sealed class NavManager {
 
         override val iconID: Int = R.drawable.twotone_history_24
         override val screenName: String = "Last_Scans"
-        override val routeType: RouteType = RouteType.USER_DEPENDING
+        override val routeType: RouteType = RouteType.INTERN
         override val category: NavRouteCategory = NavRouteCategory.FOOD
         override val extras: List<String> = emptyList()
         override fun addRoute(
@@ -267,20 +267,9 @@ sealed class NavManager {
             scans
         )
 
-        val navRoutesUserDepending = listOf(
-            physicalActivity,
-            editUser,
-            scans,
-        )
+        val navRoutesUserDepending = navRoutes.filter { it.routeType == RouteType.USER_DEPENDING }
 
-        val navRoutesFreeAccess = listOf(
-            home,
-            userList,
-            newUser,
-            foodFactsByBarcode,
-            foodList,
-            foodPrediction,
-        )
+        val navRoutesFreeAccess = navRoutes.filter { it.routeType == RouteType.FREE_ACCESS }
     }
 
 
