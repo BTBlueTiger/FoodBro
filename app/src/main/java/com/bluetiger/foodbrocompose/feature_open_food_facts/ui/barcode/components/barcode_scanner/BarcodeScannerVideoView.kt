@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components
+package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.barcode_scanner
 
 import android.content.Context
 import android.util.Log
@@ -11,18 +11,10 @@ import androidx.camera.core.Preview
 import androidx.camera.core.CameraInfo
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.Executors
 
 @androidx.camera.core.ExperimentalGetImage

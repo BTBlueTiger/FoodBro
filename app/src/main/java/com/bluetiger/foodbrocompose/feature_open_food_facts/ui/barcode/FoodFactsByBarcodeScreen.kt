@@ -27,8 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetiger.foodbrocompose.database.FBPreferences
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.BarcodeScannerVideoView
-import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.last_scans.LastScansList
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.barcode_scanner.BarcodeScannerVideoView
+import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.last_scans.LastScansList
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextField
 import kotlinx.coroutines.launch
 
@@ -144,7 +144,7 @@ fun FoodFactsByBarcodeScreen(
                         }
                     }
                 } else {
-                    LastScansList()
+                    LastScansList({ navigateToOpenFoodFacts() })
                 }
             }
         }

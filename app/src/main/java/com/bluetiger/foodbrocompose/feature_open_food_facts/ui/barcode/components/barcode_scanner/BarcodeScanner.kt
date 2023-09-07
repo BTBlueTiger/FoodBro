@@ -1,11 +1,10 @@
-package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components
+package com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.barcode_scanner
 
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode.BarcodeFormat
 import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_13
 import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_8
 import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_UPC_A
