@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
@@ -13,30 +16,52 @@ import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
 @HiltViewModel
 class AddEditUserViewModel @Inject constructor(
-    private val userUseCases: UserUseCases
+    private val userUseCases: UserUseCases,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val TAG = "AddEditUser"
 
-    private val _name = mutableStateOf(ConditionOutlineTextFieldPack(""))
-    val name: State<ConditionOutlineTextFieldPack<String>> = _name
+    private val _personalInformation =
+        mutableStateMapOf<User.ValueType, ConditionOutlineTextFieldPack<Any>>()
 
-    private val _height = mutableStateOf(ConditionOutlineTextFieldPack(0))
-    val height: State<ConditionOutlineTextFieldPack<Int>> = _height
+    val personalInformation: SnapshotStateMap<User.ValueType, ConditionOutlineTextFieldPack<Any>> =
+        _personalInformation
 
-    private val _weight = mutableStateOf(ConditionOutlineTextFieldPack(0))
-    val weight: State<ConditionOutlineTextFieldPack<Int>> = _weight
+    init {
+        User.ValueType.values().associateWith {
+            ConditionOutlineTextFieldPack(it.dataType.defaultValue())
+        }.toMap().forEach {
+            _personalInformation[it.key] = it.value
+        }
+    }
 
-    private val _gender = mutableStateOf(ConditionOutlineTextFieldPack(Gender.NONE))
-    val gender: State<ConditionOutlineTextFieldPack<Gender>> = _gender
+    private fun KClass<*>.defaultValue() = when (this) {
+        String::class -> ""
+        Int::class -> 0
+        Long::class -> 0
+        Gender::class -> Gender.NONE
+        else -> throw IllegalArgumentException("$this is not captured in default values!")
+    }
 
-    private val _birthday = mutableStateOf(ConditionOutlineTextFieldPack(0L))
-    val birthday: State<ConditionOutlineTextFieldPack<Long>> = _birthday
+    private inline fun <reified T : Any> personalInformationSetValue(
+        valueType: User.ValueType,
+        value: T
+    ) {
+        personalInformation[valueType]?.let {
+            _personalInformation[valueType] = it.copy(value)
+        }
+    }
 
     private val _onSaveUserRequest = mutableStateOf(OnSaveUserResult())
     val onSaveUserRequest: State<OnSaveUserResult> = _onSaveUserRequest
@@ -44,74 +69,19 @@ class AddEditUserViewModel @Inject constructor(
     fun onEvent(event: AddEditUserEvent) {
         when (event) {
 
+            is AddEditUserEvent.EnteredValue<*> -> {
+                personalInformationSetValue(event.enteredValueType, event.value)
+                _personalInformation[event.enteredValueType]?.isValid
+            }
+
+
             is AddEditUserEvent.EditUser -> {
                 this.viewModelScope.launch {
                     val user = userUseCases.getUser(event.name)
                     if (user != null) {
-                        _name.value = _name.value.copy(
-                            value = user.name
-                        )
-
-                        _height.value = _height.value.copy(
-                            value = user.height
-                        )
-
-                        _weight.value = _weight.value.copy(
-                            value = user.weight
-                        )
-
-                        Log.e("User", user.toString())
-
-
-                        _birthday.value = _birthday.value.copy(
-                            value = user.birthday
-                        )
-
-                        _gender.value = _gender.value.copy(
-                            value = user.gender
-                        )
-                    }
-                }
-            }
-
-            is AddEditUserEvent.EnteredValue<*> -> {
-
-                when (event.enteredValueType) {
-                    User.ValueType.NAME -> {
-                        _name.value = name.value.copy(
-                            value = event.value as String,
-                        )
-                        _name.checkValue(name)
-                    }
-
-                    User.ValueType.HEIGHT -> {
-                        _height.value =
-                            height.value.copy(
-                                value = event.value as Int
-                            )
-                        _height.checkValue(height)
-                    }
-
-                    User.ValueType.WEIGHT -> {
-                        _weight.value =
-                            weight.value.copy(
-                                value = event.value as Int
-                            )
-                        _weight.checkValue(weight)
-                    }
-
-                    User.ValueType.GENDER -> {
-                        _gender.value = gender.value.copy(
-                            value = event.value as Gender
-                        )
-                        _gender.checkValue(gender)
-                    }
-
-                    User.ValueType.BIRTHDAY -> {
-                        _birthday.value = birthday.value.copy(
-                            value = event.value as Long
-                        )
-                        _birthday.checkValue(birthday)
+                        User.ValueType.values().forEach {
+                            personalInformationSetValue(it, user.iterator().next())
+                        }
                     }
                 }
             }
@@ -119,22 +89,15 @@ class AddEditUserViewModel @Inject constructor(
             is AddEditUserEvent.SaveUser -> {
                 viewModelScope.launch {
 
-                    if (_name.isValid(User.ValueType.NAME, name) &&
-                        _height.isValid(User.ValueType.HEIGHT, height) &&
-                        _weight.isValid(User.ValueType.WEIGHT, weight) &&
-                        _gender.isValid(User.ValueType.GENDER, gender) &&
-                        _birthday.isValid(User.ValueType.BIRTHDAY, birthday)
-                    ) {
-
+                    if (_personalInformation.filter { it.value.isValid }.isEmpty()) {
                         val user = User(
-                            name = name.value.value,
-                            height = height.value.value,
-                            weight = weight.value.value,
-                            gender = gender.value.value,
-                            birthday = birthday.value.value
+                            name = personalInformation[User.ValueType.NAME]!!.toValue(),
+                            height = personalInformation[User.ValueType.HEIGHT]!!.toValue(),
+                            weight = personalInformation[User.ValueType.WEIGHT]!!.toValue(),
+                            gender = personalInformation[User.ValueType.GENDER]!!.toValue(),
+                            birthday = personalInformation[User.ValueType.BIRTHDAY]!!.toValue()
                         )
                         userUseCases.addUser(user)
-
 
                         _onSaveUserRequest.value = onSaveUserRequest.value.copy(
                             success = true,
@@ -202,6 +165,7 @@ class AddEditUserViewModel @Inject constructor(
             }
 
             User.ValueType.WEIGHT -> {
+                
                 if (this.value.value as Int == 0) {
                     this.value = state.value.copy(
                         isError = true,

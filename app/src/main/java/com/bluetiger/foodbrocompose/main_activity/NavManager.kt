@@ -8,7 +8,8 @@ import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.FoodFactsByBarcodeScreen
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.food_fact.screen.OpenFoodFactScreen
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.last_scans.LastScansList
-import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreen
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreenActivity
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserScreenPersonal
 import com.bluetiger.foodbrocompose.feature_user.ui.user_list.UserListScreen
 
 
@@ -120,9 +121,7 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
-                AddEditUserScreen(navigateToHome = {
-                    navController.navigate(Home().screenName)
-                })
+                AddEditUserScreenActivity()
             }
         }
     }
@@ -140,9 +139,7 @@ sealed class NavManager {
             topModel: FoodBroActivityModel
         ) {
             navGraphBuilder.composable(screenName) {
-                AddEditUserScreen(navigateToHome = {
-                    navController.navigate(Home().screenName)
-                })
+                AddEditUserScreenActivity()
             }
         }
     }

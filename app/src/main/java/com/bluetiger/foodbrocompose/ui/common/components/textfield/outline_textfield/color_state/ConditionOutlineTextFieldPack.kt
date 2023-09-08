@@ -9,4 +9,8 @@ data  class ConditionOutlineTextFieldPack <T>(
     val isError : Boolean = false,
     val isValid : Boolean = false,
     val supportingText: @Composable() (() -> Unit)? = null
-)
+) {
+    fun <U> toValue(): U {
+        return value as U
+    }
+}

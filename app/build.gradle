@@ -135,7 +135,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
 
 
-    //Accompanist
 
 }
 
