@@ -8,7 +8,7 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.component
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.last_scans.drop_down_actions.LastScanDropDownActions
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.last_scans.drop_down_actions.RemoveFromFavorites
 import com.bluetiger.foodbrocompose.feature_open_food_facts.ui.barcode.components.last_scans.drop_down_actions.RemoveFromList
-import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal.UserUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

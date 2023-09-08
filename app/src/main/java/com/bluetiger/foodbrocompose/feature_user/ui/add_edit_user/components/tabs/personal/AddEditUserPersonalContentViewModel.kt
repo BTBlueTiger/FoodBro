@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user
+package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal
 
 import android.util.Log
 import androidx.compose.material3.Text
@@ -11,21 +11,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
-import com.bluetiger.foodbrocompose.feature_user.domain.model.User
-import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal.UserUseCases
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserEvent
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 @HiltViewModel
-class AddEditUserViewModel @Inject constructor(
+class AddEditUserPersonalContentViewModel @Inject constructor(
     private val userUseCases: UserUseCases,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -33,13 +31,13 @@ class AddEditUserViewModel @Inject constructor(
     private val TAG = "AddEditUser"
 
     private val _personalInformation =
-        mutableStateMapOf<User.ValueType, ConditionOutlineTextFieldPack<Any>>()
+        mutableStateMapOf<UserPersonal.ValueType, ConditionOutlineTextFieldPack<Any>>()
 
-    val personalInformation: SnapshotStateMap<User.ValueType, ConditionOutlineTextFieldPack<Any>> =
+    val personalInformation: SnapshotStateMap<UserPersonal.ValueType, ConditionOutlineTextFieldPack<Any>> =
         _personalInformation
 
     init {
-        User.ValueType.values().associateWith {
+        UserPersonal.ValueType.values().associateWith {
             ConditionOutlineTextFieldPack(it.dataType.defaultValue())
         }.toMap().forEach {
             _personalInformation[it.key] = it.value
@@ -55,7 +53,7 @@ class AddEditUserViewModel @Inject constructor(
     }
 
     private inline fun <reified T : Any> personalInformationSetValue(
-        valueType: User.ValueType,
+        valueType: UserPersonal.ValueType,
         value: T
     ) {
         personalInformation[valueType]?.let {
@@ -79,7 +77,7 @@ class AddEditUserViewModel @Inject constructor(
                 this.viewModelScope.launch {
                     val user = userUseCases.getUser(event.name)
                     if (user != null) {
-                        User.ValueType.values().forEach {
+                        UserPersonal.ValueType.values().forEach {
                             personalInformationSetValue(it, user.iterator().next())
                         }
                     }
@@ -90,14 +88,14 @@ class AddEditUserViewModel @Inject constructor(
                 viewModelScope.launch {
 
                     if (_personalInformation.filter { it.value.isValid }.isEmpty()) {
-                        val user = User(
-                            name = personalInformation[User.ValueType.NAME]!!.toValue(),
-                            height = personalInformation[User.ValueType.HEIGHT]!!.toValue(),
-                            weight = personalInformation[User.ValueType.WEIGHT]!!.toValue(),
-                            gender = personalInformation[User.ValueType.GENDER]!!.toValue(),
-                            birthday = personalInformation[User.ValueType.BIRTHDAY]!!.toValue()
+                        val userPersonal = UserPersonal(
+                            name = personalInformation[UserPersonal.ValueType.NAME]!!.toValue(),
+                            height = personalInformation[UserPersonal.ValueType.HEIGHT]!!.toValue(),
+                            weight = personalInformation[UserPersonal.ValueType.WEIGHT]!!.toValue(),
+                            gender = personalInformation[UserPersonal.ValueType.GENDER]!!.toValue(),
+                            birthday = personalInformation[UserPersonal.ValueType.BIRTHDAY]!!.toValue()
                         )
-                        userUseCases.addUser(user)
+                        userUseCases.addUser(userPersonal)
 
                         _onSaveUserRequest.value = onSaveUserRequest.value.copy(
                             success = true,
@@ -120,13 +118,13 @@ class AddEditUserViewModel @Inject constructor(
     )
 
     private inline fun <reified T> MutableState<ConditionOutlineTextFieldPack<T>>.isValid(
-        valueType: User.ValueType,
+        valueType: UserPersonal.ValueType,
         state: State<ConditionOutlineTextFieldPack<T>>
     ): Boolean {
         Log.e(TAG, valueType.toString())
 
         when (valueType) {
-            User.ValueType.NAME -> {
+            UserPersonal.ValueType.NAME -> {
                 return if ((this.value.value as String).isEmpty()) {
                     this.value = state.value.copy(
                         isError = true,
@@ -142,14 +140,14 @@ class AddEditUserViewModel @Inject constructor(
                 }
             }
 
-            User.ValueType.HEIGHT -> {
+            UserPersonal.ValueType.HEIGHT -> {
                 if (this.value.value as Int == 0) {
                     this.value = state.value.copy(
                         isError = true,
                         supportingText = { Text(text = "The height have to be set") }
                     )
                     return false
-                } else if (this.value.value as Int >= User.MAX_HEIGHT) {
+                } else if (this.value.value as Int >= UserPersonal.MAX_HEIGHT) {
                     this.value = state.value.copy(
                         isError = true,
                         supportingText = { Text(text = "This height have to be a mistake") }
@@ -164,15 +162,15 @@ class AddEditUserViewModel @Inject constructor(
                 }
             }
 
-            User.ValueType.WEIGHT -> {
-                
+            UserPersonal.ValueType.WEIGHT -> {
+
                 if (this.value.value as Int == 0) {
                     this.value = state.value.copy(
                         isError = true,
                         supportingText = { Text(text = "The weight have to be set") }
                     )
                     return false
-                } else if (this.value.value as Int >= User.MAX_WEIGHT) {
+                } else if (this.value.value as Int >= UserPersonal.MAX_WEIGHT) {
                     this.value = state.value.copy(
                         isError = true,
                         supportingText = { Text(text = "This weight have to be a mistake") }
@@ -187,7 +185,7 @@ class AddEditUserViewModel @Inject constructor(
                 }
             }
 
-            User.ValueType.GENDER -> {
+            UserPersonal.ValueType.GENDER -> {
                 return if (value.value == Gender.NONE) {
                     this.value = state.value.copy(
                         isError = true
@@ -209,7 +207,7 @@ class AddEditUserViewModel @Inject constructor(
                 }
             }
 
-            User.ValueType.BIRTHDAY -> {
+            UserPersonal.ValueType.BIRTHDAY -> {
                 return if (value.value == 0L) {
                     this.value = state.value.copy(
                         isError = true,

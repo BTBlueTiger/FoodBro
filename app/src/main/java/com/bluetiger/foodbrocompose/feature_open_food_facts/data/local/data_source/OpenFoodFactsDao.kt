@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.bluetiger.foodbrocompose.database.room.BaseDao
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
-import com.bluetiger.foodbrocompose.feature_user.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao

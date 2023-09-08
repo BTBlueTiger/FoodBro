@@ -1,6 +1,38 @@
 package com.bluetiger.foodbrocompose.feature_user.domain.model
 
-data class UserActivity(val user: User){
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+
+@Entity(
+    tableName = "user_activity",
+    foreignKeys = [
+        ForeignKey(
+            entity = UserPersonal::class,
+            parentColumns = ["name"],
+            childColumns = ["userName"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class UserActivity(
+    @PrimaryKey(autoGenerate = true)
+    val userActivityId: Long = 0,
+    val userName: String = "",
+    @ColumnInfo(name = "sleep") val sleep: Float = 0f,
+    @ColumnInfo(name = "lightly_active") val lightlyActive: Float = 0f,
+    @ColumnInfo(name = "moderately_active") val moderatelyActive: Float = 0f,
+    @ColumnInfo(name = "active") val active: Float = 0f,
+    @ColumnInfo(name = "very_active") val veryActive: Float = 0f,
+    @ColumnInfo(name = "hard_active") val hardActive: Float = 0f,
+    @ColumnInfo(name = "pal") val pal: Float = 0f
+) {
+
+    operator fun iterator(): Iterator<Float> {
+        return listOf(sleep, lightlyActive, moderatelyActive, active, veryActive, hardActive).iterator()
+    }
+
     enum class ValueType(
         val shortTerm: String,
         val description: String,
@@ -57,6 +89,5 @@ data class UserActivity(val user: User){
             2.2f,
             "Miners, Farmers, Forest workers, High performance sportler"
         )
-
     }
 }

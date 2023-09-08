@@ -11,14 +11,17 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutrien
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriments.NutrimentsDataConverter
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data.NutriScoreDataConverter
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneralDataConverter
-import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserDao
-import com.bluetiger.foodbrocompose.feature_user.domain.model.User
+import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserActivityDao
+import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserPersonalDao
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivity
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
 import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroListDao
 import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
 
 @Database(
     entities = [
-        User::class,
+        UserPersonal::class,
+        UserActivity::class,
         OpenFoodFactsData::class,
         FoodBroList::class
     ],
@@ -34,7 +37,8 @@ import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
     SerializeAbleListConverter::class
 )
 abstract class FoodBroDataBase : RoomDatabase() {
-    abstract val userDao: UserDao
+    abstract val userActivityDao: UserActivityDao
+    abstract val userPersonalDao: UserPersonalDao
     abstract val foodFactsDao: OpenFoodFactsDao
     abstract val foodBroListDao: FoodBroListDao
 

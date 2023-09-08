@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components
+package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -15,16 +15,15 @@ import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bluetiger.foodbrocompose.R
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
-import com.bluetiger.foodbrocompose.feature_user.domain.model.User
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserEvent
-import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserViewModel
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.LeftColIconRightColRows
 import com.bluetiger.foodbrocompose.ui.common.components.headline.HeadLine
 import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionGroupSingleSelect
 import com.bluetiger.foodbrocompose.ui.common.components.selection.SelectionModel
@@ -37,7 +36,7 @@ import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textf
 fun ColorStateOutlineTextFieldBuilder(
     state: ConditionOutlineTextFieldPack<*>?,
     onValueChange: (String) -> Unit,
-    valueType: User.ValueType,
+    valueType: UserPersonal.ValueType,
 ) {
     ConditionOutlineTextField(
         state = state ?: ConditionOutlineTextFieldPack<String>(""),
@@ -49,7 +48,7 @@ fun ColorStateOutlineTextFieldBuilder(
 
 @Composable
 fun AddEditUserPersonalTabRow(
-    viewModel: AddEditUserViewModel = hiltViewModel()
+    viewModel: AddEditUserPersonalContentViewModel = hiltViewModel()
 ) {
 
     val personalInformationMap = viewModel.personalInformation.toMap()
@@ -76,47 +75,47 @@ fun AddEditUserPersonalTabRow(
                     // Email
                     Row(Modifier.fillMaxWidth()) {
                         ColorStateOutlineTextFieldBuilder(
-                            state = personalInformationMap[User.ValueType.NAME],
+                            state = personalInformationMap[UserPersonal.ValueType.NAME],
                             onValueChange = {
                                 viewModel.onEvent(
-                                    AddEditUserEvent.EnteredValue(it, User.ValueType.NAME)
+                                    AddEditUserEvent.EnteredValue(it, UserPersonal.ValueType.NAME)
                                 )
-                            }, valueType = User.ValueType.NAME
+                            }, valueType = UserPersonal.ValueType.NAME
                         )
                     },
                     // Height
                     Row(Modifier.fillMaxWidth()) {
 
                         ColorStateOutlineTextFieldBuilder(
-                            state = personalInformationMap[User.ValueType.HEIGHT],
+                            state = personalInformationMap[UserPersonal.ValueType.HEIGHT],
                             onValueChange = {
                                 if (it.toIntOrNull() != null) {
                                     viewModel.onEvent(
                                         AddEditUserEvent.EnteredValue(
                                             it.toInt(),
-                                            User.ValueType.HEIGHT
+                                            UserPersonal.ValueType.HEIGHT
                                         )
                                     )
                                 }
                             },
-                            valueType = User.ValueType.HEIGHT
+                            valueType = UserPersonal.ValueType.HEIGHT
                         )
                     },
                     // Weight
                     Row(Modifier.fillMaxWidth()) {
                         ColorStateOutlineTextFieldBuilder(
-                            state = personalInformationMap[User.ValueType.WEIGHT],
+                            state = personalInformationMap[UserPersonal.ValueType.WEIGHT],
                             onValueChange = {
                                 if (it.toIntOrNull() != null) {
                                     viewModel.onEvent(
                                         AddEditUserEvent.EnteredValue(
                                             it.toInt(),
-                                            User.ValueType.WEIGHT
+                                            UserPersonal.ValueType.WEIGHT
                                         )
                                     )
                                 }
                             },
-                            valueType = User.ValueType.WEIGHT
+                            valueType = UserPersonal.ValueType.WEIGHT
                         )
                     }
                 )
@@ -129,7 +128,7 @@ fun AddEditUserPersonalTabRow(
                 listOf(
                     Row(Modifier.fillMaxWidth()) {
                         DatePickerTextField(
-                            value = personalInformationMap[User.ValueType.BIRTHDAY]?.toValue() ?: 0,
+                            value = personalInformationMap[UserPersonal.ValueType.BIRTHDAY]?.toValue() ?: 0,
                             label = { Text(text = "Birthday") },
                             placeholder = { Text(text = "28.08.1995") },
                             modifier = Modifier,
@@ -138,11 +137,11 @@ fun AddEditUserPersonalTabRow(
                                 viewModel.onEvent(
                                     AddEditUserEvent.EnteredValue(
                                         it,
-                                        User.ValueType.BIRTHDAY
+                                        UserPersonal.ValueType.BIRTHDAY
                                     )
                                 )
                             },
-                            colors = personalInformationMap[User.ValueType.NAME]?.colorCase?.color()
+                            colors = personalInformationMap[UserPersonal.ValueType.NAME]?.colorCase?.color()
                                 ?: OutlineTextFieldColorCases.DEFAULT.color(),
                         )
                     }
@@ -156,7 +155,7 @@ fun AddEditUserPersonalTabRow(
             Divider(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
 
             SelectionGroupSingleSelect(
-                value = personalInformationMap[User.ValueType.GENDER]?.value?: Gender.NONE,
+                value = personalInformationMap[UserPersonal.ValueType.GENDER]?.value?: Gender.NONE,
                 modifier = Modifier,
                 selections = listOf(
                     SelectionModel("Male", R.drawable.baseline_male_24, Gender.MALE),
@@ -167,7 +166,7 @@ fun AddEditUserPersonalTabRow(
                     viewModel.onEvent(
                         AddEditUserEvent.EnteredValue(
                             it,
-                            User.ValueType.GENDER
+                            UserPersonal.ValueType.GENDER
                         )
                     )
                 }

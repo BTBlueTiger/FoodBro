@@ -1,4 +1,4 @@
-package com.bluetiger.foodbrocompose.feature_user.domain.use_case
+package com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal
 
 data class UserUseCases(
     val addUser: AddUser,

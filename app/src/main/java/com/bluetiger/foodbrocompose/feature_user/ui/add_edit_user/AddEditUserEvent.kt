@@ -1,13 +1,12 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user
 
-import com.bluetiger.foodbrocompose.feature_user.domain.model.User
-import kotlin.reflect.KClass
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
 
 sealed class AddEditUserEvent {
 
     data class EnteredValue<T : Any>(
         val value: T,
-        val enteredValueType: User.ValueType
+        val enteredValueType: UserPersonal.ValueType
     ) :
         AddEditUserEvent()
 

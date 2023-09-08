@@ -1,8 +1,10 @@
-package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components
+package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs
 
 import androidx.compose.runtime.Composable
 import com.bluetiger.foodbrocompose.R
-import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserViewModel
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.activity.AddEditUserActivityTabRow
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.nutrition_settings.AddEditUserNutritionSettingsContent
+import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal.AddEditUserPersonalTabRow
 
 sealed class AddEditUserTab() {
 

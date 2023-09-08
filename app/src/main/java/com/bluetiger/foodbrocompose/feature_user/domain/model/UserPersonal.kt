@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import kotlin.reflect.KClass
 
 @Entity(tableName = "user")
-data class User(
+data class UserPersonal(
     @PrimaryKey val name: String,
     @ColumnInfo(name = "birthday") val birthday: Long,
     @ColumnInfo(name = "height") val height: Int,
@@ -28,7 +28,7 @@ data class User(
     companion object {
         const val MAX_HEIGHT = 251
         const val MAX_WEIGHT = 635
-        fun emptyUser() = User("", 0, 0, 0, Gender.MALE)
+        fun emptyUser() = UserPersonal("", 0, 0, 0, Gender.MALE)
     }
 
     class InvalidUserException(message: String) : Exception(message)
