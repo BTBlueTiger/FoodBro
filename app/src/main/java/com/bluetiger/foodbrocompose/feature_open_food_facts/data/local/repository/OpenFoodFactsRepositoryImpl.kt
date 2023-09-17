@@ -3,7 +3,7 @@ package com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.reposito
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.data_source.OpenFoodFactsDao
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.repository.OpenFoodFactsRepository
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,8 +16,8 @@ class OpenFoodFactsRepositoryImpl(
     val lastResponse: StateFlow<OpenFoodFactsData> = _lastResponseState
 
 
-    override fun getOpenFoodFactsResponsesFromUser(userPersonal: UserPersonal): Flow<List<OpenFoodFactsData>> {
-        return dao.getOpenFoodFactResponsesByUser(userName = userPersonal.name)
+    override fun getOpenFoodFactsResponsesFromUser(userPersonalInformation: UserPersonalInformation): Flow<List<OpenFoodFactsData>> {
+        return dao.getOpenFoodFactResponsesByUser(userName = userPersonalInformation.name)
     }
 
     override suspend fun getOpenFoodFactResponseByTimeStamp(timestamp: Long): OpenFoodFactsData {

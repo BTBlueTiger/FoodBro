@@ -38,6 +38,7 @@ fun LastScansList(
     navigateToOpenFoodFact: () -> Unit,
     viewModel: LastScansViewModel = hiltViewModel()
 ) {
+    /*
     val foodFacts =
         viewModel.scannedFoodFacts?.collectAsState(initial = emptyList())?.value ?: emptyList()
     val dropDownActions = viewModel.lastScanDropDownActions
@@ -97,4 +98,6 @@ fun LastScansList(
         }
     }
 
+
+     */
 }

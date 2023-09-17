@@ -35,7 +35,7 @@ fun DatePickerDialog(
             TextButton(
                 onClick = {
                     onDismissRequest()
-                    onSelected.invoke(datePickerState.selectedDateMillis ?: 0)
+                    onSelected.invoke(datePickerState.selectedDateMillis ?: 0L)
                 }
             ) {
                 Text("Ok")

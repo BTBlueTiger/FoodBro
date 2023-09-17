@@ -1,0 +1,3 @@
+package com.bluetiger.foodbrocompose.common
+
+interface FoodBroRepository

@@ -6,29 +6,33 @@ import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tab
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.nutrition_settings.AddEditUserNutritionSettingsContent
 import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal.AddEditUserPersonalTabRow
 
-sealed class AddEditUserTab() {
+sealed class AddEditUserTab {
 
     abstract val titleName: String
-    abstract val iconId : Int
+    abstract val iconId: Int
+
     @Composable
     abstract fun TabRow()
 
-    object PersonalInformation : AddEditUserTab(){
+    object PersonalInformation : AddEditUserTab() {
         override val titleName: String
             get() = "Personal"
         override val iconId: Int
             get() = R.drawable.twotone_person_24
+
         @Composable
-        override fun TabRow() = AddEditUserPersonalTabRow()
+        override fun TabRow() =
+            AddEditUserPersonalTabRow()
     }
-    object ActivityInformation : AddEditUserTab(){
+
+    object ActivityInformation : AddEditUserTab() {
         override val titleName: String
             get() = "Activity"
-
         override val iconId: Int
             get() = R.drawable.twotone_sports_24
         @Composable
-        override fun TabRow() = AddEditUserActivityTabRow()
+        override fun TabRow() =
+            AddEditUserActivityTabRow()
     }
 
     object FoodNutritionSettings : AddEditUserTab(){
@@ -37,7 +41,9 @@ sealed class AddEditUserTab() {
         override val iconId: Int
             get() = R.drawable.twotone_settings_24
 
+
         @Composable
-        override fun TabRow() = AddEditUserNutritionSettingsContent()
+        override fun TabRow() =
+            AddEditUserNutritionSettingsContent()
     }
 }

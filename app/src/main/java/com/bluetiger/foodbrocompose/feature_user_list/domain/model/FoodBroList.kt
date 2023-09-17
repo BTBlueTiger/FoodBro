@@ -5,13 +5,13 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.bluetiger.foodbrocompose.database.room.common.SerializeAbleList
 
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
 
 @Entity(
     tableName = "food_bro_list",
     foreignKeys = [
         ForeignKey(
-            entity = UserPersonal::class,
+            entity = UserPersonalInformation::class,
             parentColumns = ["name"],
             childColumns = ["userName"], // Match the field name in FoodBroList
             onDelete = ForeignKey.CASCADE

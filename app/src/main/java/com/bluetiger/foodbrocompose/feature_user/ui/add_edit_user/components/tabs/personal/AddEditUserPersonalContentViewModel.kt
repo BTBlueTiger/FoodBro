@@ -1,26 +1,18 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal
 
-import android.util.Log
 import androidx.compose.material3.Text
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.toMutableStateMap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.bluetiger.foodbrocompose.defaultValue
 import com.bluetiger.foodbrocompose.feature_user.domain.model.Gender
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
-import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal.UserUseCases
-import com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.AddEditUserEvent
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 @HiltViewModel
 class AddEditUserPersonalContentViewModel @Inject constructor(
@@ -28,234 +20,150 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val pendingMap by lazy { userUseCases.pendingInformation.newUser.getValue() }
+    private val newUserPersonal by lazy { pendingMap[UserPersonalInformation::class] as UserPersonalInformation }
+
     private val TAG = "AddEditUser"
 
     private val _personalInformation =
-        mutableStateMapOf<UserPersonal.ValueType, ConditionOutlineTextFieldPack<Any>>()
+        UserPersonalInformation.ValueType.values().map {
+            it to ConditionOutlineTextFieldPack(it.dataType.defaultValue())
+        }.toMutableStateMap()
 
-    val personalInformation: SnapshotStateMap<UserPersonal.ValueType, ConditionOutlineTextFieldPack<Any>> =
+    val personalInformation: SnapshotStateMap<UserPersonalInformation.ValueType, ConditionOutlineTextFieldPack<Any>> =
         _personalInformation
 
+
     init {
-        UserPersonal.ValueType.values().associateWith {
-            ConditionOutlineTextFieldPack(it.dataType.defaultValue())
-        }.toMap().forEach {
-            _personalInformation[it.key] = it.value
+        if (pendingMap.isPending) {
+            val iterator = newUserPersonal.iterator()
+            UserPersonalInformation.ValueType.values().forEach {
+                personalInformation.copy(it, iterator.next())
+            }
         }
     }
 
-    private fun KClass<*>.defaultValue() = when (this) {
-        String::class -> ""
-        Int::class -> 0
-        Long::class -> 0
-        Gender::class -> Gender.NONE
-        else -> throw IllegalArgumentException("$this is not captured in default values!")
+
+    fun onEvent(event: AddEditUserPersonalContentEvent) {
+        when (event) {
+            is AddEditUserPersonalContentEvent.EnteredValue<*> -> {
+
+                personalInformation.copy(event.enteredValueType, event.value)
+                userUseCases.pendingInformation.newUser.getValue().isPending = true
+
+                pendingMap[UserPersonalInformation::class] =
+                    newUserPersonal.customCopy(
+                        event.enteredValueType.memberParam,
+                        event.value
+                    ) as UserPersonalInformation
+                userUseCases.pendingInformation.newUser.setValue(pendingMap)
+            }
+
+            is AddEditUserPersonalContentEvent.OnChangeTab -> {
+
+            }
+        }
     }
 
-    private inline fun <reified T : Any> personalInformationSetValue(
-        valueType: UserPersonal.ValueType,
+    private fun <T> SnapshotStateMap<UserPersonalInformation.ValueType, ConditionOutlineTextFieldPack<T>>.copy(
+        valueType: UserPersonalInformation.ValueType,
         value: T
     ) {
-        personalInformation[valueType]?.let {
-            _personalInformation[valueType] = it.copy(value)
-        }
-    }
-
-    private val _onSaveUserRequest = mutableStateOf(OnSaveUserResult())
-    val onSaveUserRequest: State<OnSaveUserResult> = _onSaveUserRequest
-
-    fun onEvent(event: AddEditUserEvent) {
-        when (event) {
-
-            is AddEditUserEvent.EnteredValue<*> -> {
-                personalInformationSetValue(event.enteredValueType, event.value)
-                _personalInformation[event.enteredValueType]?.isValid
-            }
-
-
-            is AddEditUserEvent.EditUser -> {
-                this.viewModelScope.launch {
-                    val user = userUseCases.getUser(event.name)
-                    if (user != null) {
-                        UserPersonal.ValueType.values().forEach {
-                            personalInformationSetValue(it, user.iterator().next())
-                        }
-                    }
-                }
-            }
-
-            is AddEditUserEvent.SaveUser -> {
-                viewModelScope.launch {
-
-                    if (_personalInformation.filter { it.value.isValid }.isEmpty()) {
-                        val userPersonal = UserPersonal(
-                            name = personalInformation[UserPersonal.ValueType.NAME]!!.toValue(),
-                            height = personalInformation[UserPersonal.ValueType.HEIGHT]!!.toValue(),
-                            weight = personalInformation[UserPersonal.ValueType.WEIGHT]!!.toValue(),
-                            gender = personalInformation[UserPersonal.ValueType.GENDER]!!.toValue(),
-                            birthday = personalInformation[UserPersonal.ValueType.BIRTHDAY]!!.toValue()
-                        )
-                        userUseCases.addUser(userPersonal)
-
-                        _onSaveUserRequest.value = onSaveUserRequest.value.copy(
-                            success = true,
-                            snackBarMessage = null
-                        )
-
-                    } else {
-                        _onSaveUserRequest.value = onSaveUserRequest.value.copy(
-                            success = false
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    data class OnSaveUserResult(
-        val snackBarMessage: String? = null,
-        val success: Boolean = false
-    )
-
-    private inline fun <reified T> MutableState<ConditionOutlineTextFieldPack<T>>.isValid(
-        valueType: UserPersonal.ValueType,
-        state: State<ConditionOutlineTextFieldPack<T>>
-    ): Boolean {
-        Log.e(TAG, valueType.toString())
-
         when (valueType) {
-            UserPersonal.ValueType.NAME -> {
-                return if ((this.value.value as String).isEmpty()) {
-                    this.value = state.value.copy(
+            UserPersonalInformation.ValueType.NAME -> {
+                this[valueType] = if ((value as String).isEmpty()) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "A name is required") }
                     )
-                    false
                 } else {
-                    this.value = state.value.copy(
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = false,
-                        supportingText = null
+                        supportingText = null,
+                        colorCase = OutlineTextFieldColorCases.VALID
                     )
-                    true
                 }
             }
 
-            UserPersonal.ValueType.HEIGHT -> {
-                if (this.value.value as Int == 0) {
-                    this.value = state.value.copy(
+            UserPersonalInformation.ValueType.HEIGHT -> {
+                this[valueType] = if (value as Int == 0) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "The height have to be set") }
                     )
-                    return false
-                } else if (this.value.value as Int >= UserPersonal.MAX_HEIGHT) {
-                    this.value = state.value.copy(
+                } else if (value as Int >= UserPersonalInformation.MAX_HEIGHT) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "This height have to be a mistake") }
                     )
-                    return false
                 } else {
-                    this.value = state.value.copy(
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = false,
-                        supportingText = null
+                        supportingText = null,
+                        colorCase = OutlineTextFieldColorCases.VALID
                     )
-                    return true
                 }
             }
 
-            UserPersonal.ValueType.WEIGHT -> {
+            UserPersonalInformation.ValueType.WEIGHT -> {
 
-                if (this.value.value as Int == 0) {
-                    this.value = state.value.copy(
+                this[valueType] = if (value as Int == 0) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "The weight have to be set") }
                     )
-                    return false
-                } else if (this.value.value as Int >= UserPersonal.MAX_WEIGHT) {
-                    this.value = state.value.copy(
+                } else if (value as Int >= UserPersonalInformation.MAX_WEIGHT) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "This weight have to be a mistake") }
                     )
-                    return false
                 } else {
-                    this.value = state.value.copy(
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = false,
-                        supportingText = null
+                        supportingText = null,
+                        colorCase = OutlineTextFieldColorCases.VALID
                     )
-                    return true
                 }
             }
 
-            UserPersonal.ValueType.GENDER -> {
-                return if (value.value == Gender.NONE) {
-                    this.value = state.value.copy(
+            UserPersonalInformation.ValueType.GENDER -> {
+                this[valueType] = if (value == Gender.NONE) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true
                     )
-                    _onSaveUserRequest.value = onSaveUserRequest.value.copy(
-                        snackBarMessage = "Gender has to be set",
-                        success = false
-                    )
-                    false
                 } else {
-                    this.value = state.value.copy(
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = false
                     )
-                    _onSaveUserRequest.value = onSaveUserRequest.value.copy(
-                        snackBarMessage = null,
-                        success = true
-                    )
-                    true
                 }
             }
 
-            UserPersonal.ValueType.BIRTHDAY -> {
-                return if (value.value == 0L) {
-                    this.value = state.value.copy(
+            UserPersonalInformation.ValueType.BIRTHDAY -> {
+
+                this[valueType] = if (value as Long == 0L) {
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = true,
                         supportingText = { Text(text = "We need your birthday for calculations") }
                     )
-                    false
                 } else {
-                    this.value = state.value.copy(
+                    this[valueType]!!.copy(
+                        value = value,
                         isError = false,
-                        supportingText = null
+                        supportingText = null,
+                        colorCase = OutlineTextFieldColorCases.VALID
                     )
-                    true
                 }
-            }
-        }
-    }
-
-    private inline fun <reified T> MutableState<ConditionOutlineTextFieldPack<T>>.checkValue(state: State<ConditionOutlineTextFieldPack<T>>) {
-
-        if (T::class == String::class) {
-            if ((value.value as String).isEmpty()) {
-                this.value = state.value.copy(
-                    supportingText = null,
-                    isError = false,
-                    colorCase = OutlineTextFieldColorCases.DEFAULT
-                )
-            } else {
-                this.value = state.value.copy(
-                    supportingText = null,
-                    isError = false,
-                    colorCase = OutlineTextFieldColorCases.VALID
-                )
-            }
-        }
-
-        if (T::class == Int::class || T::class == Long::class) {
-            if ((this.value.value as Number) == 0) {
-                this.value = state.value.copy(
-                    supportingText = null,
-                    isError = false,
-                    colorCase = OutlineTextFieldColorCases.DEFAULT
-                )
-            } else {
-                this.value = state.value.copy(
-                    supportingText = null,
-                    isError = false,
-                    colorCase = OutlineTextFieldColorCases.VALID
-                )
             }
         }
     }

@@ -14,7 +14,7 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.data.local.repositor
 import com.bluetiger.foodbrocompose.feature_open_food_facts.data.remote.OpenFoodFactsService
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.OpenFoodFactsData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.use_case.OpenFoodFactDataUseCases
-import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal.UserUseCases
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal_informations.UserPersonalInformationUseCases
 import com.bluetiger.foodbrocompose.permission.use_case.PermissionUseCases
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.color_state.ConditionOutlineTextFieldPack
 import com.bluetiger.foodbrocompose.ui.common.components.textfield.outline_textfield.colors.OutlineTextFieldColorCases
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class FoodFactsByBarcodeViewModel @Inject constructor(
     private val permissionUseCases: PermissionUseCases,
     private val foodFactDataUseCases: OpenFoodFactDataUseCases,
-    private val userUseCases: UserUseCases,
+    private val userPersonalInformationUseCases: UserPersonalInformationUseCases,
     val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -111,11 +111,11 @@ class FoodFactsByBarcodeViewModel @Inject constructor(
                         val data = OpenFoodFactsResponseExtractor.createData(response)
                         _response.value = data
                         foodFactDataUseCases.setLastOpenFoodFactData(data)
-                        if (userUseCases.getCurrentUser.notNull()) {
+                        if (userPersonalInformationUseCases.getPendingNewUserPersonalInformation.notNull()) {
                             foodFactDataUseCases.insertOpenFoodFact(
                                 data.copy(
                                     timeStamp = System.currentTimeMillis(),
-                                    userName = userUseCases.getCurrentUser()!!.name
+                                    userName = ""
                                 )
                             )
                         }

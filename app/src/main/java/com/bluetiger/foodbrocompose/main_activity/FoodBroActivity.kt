@@ -96,13 +96,16 @@ class FoodBroActivity() : AppCompatActivity() {
     ) {
         foodBroModel = viewModel
 
-        val userState = viewModel.user.collectAsState()
+        //val userState = viewModel.user.collectAsState()
 
         val topBarHeadline = remember { mutableStateOf("FoodBro") }
 
+        /*
         LaunchedEffect(key1 = userState.value){
           topBarHeadline.value = userState.value?.name ?: "FoodBro"
         }
+
+         */
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val navController = rememberNavController()
@@ -130,7 +133,7 @@ class FoodBroActivity() : AppCompatActivity() {
                     actions = {
                         IconButton(onClick = {
                             viewModel.onEvent(FoodBroActivityEvent.Logout(navController))
-                            Log.e("Viemodel", viewModel.user.toString())
+                            //Log.e("Viemodel", viewModel.user.toString())
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.twotone_logout_24), ""

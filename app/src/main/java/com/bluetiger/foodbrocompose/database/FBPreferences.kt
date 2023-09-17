@@ -3,6 +3,7 @@ package com.bluetiger.foodbrocompose.database
 import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import com.bluetiger.foodbrocompose.main_activity.NavManager
 
 open class SimpleSingletonHolder<out T : Any>(private val creator: () -> T) {
     @Volatile
@@ -37,7 +38,8 @@ class FBPreferences private constructor() {
 
 
     enum class PreferenceTask {
-        DESIRED_BARCODE
+        DESIRED_BARCODE,
+        CURRENT_USER
     }
 
     companion object : SimpleSingletonHolder<FBPreferences>(::FBPreferences)

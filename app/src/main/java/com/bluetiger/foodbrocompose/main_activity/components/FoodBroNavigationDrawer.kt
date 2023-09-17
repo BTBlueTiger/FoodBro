@@ -38,13 +38,13 @@ fun FoodBroNavigationDrawer(
     navHost: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val userState = viewModel.user.collectAsState()
+    val userState = null
     val routes = remember { mutableStateListOf<NavManager>() }
 
-    LaunchedEffect(key1 = userState.value) {
+    LaunchedEffect(key1 = userState) {
         routes.clear()
         routes.addAll(
-            if (userState.value != null) {
+            if (userState != null) {
                 NavManager.navRoutesFreeAccess + NavManager.navRoutesUserDepending
             } else {
                 NavManager.navRoutesFreeAccess

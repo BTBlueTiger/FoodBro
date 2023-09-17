@@ -8,13 +8,13 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutrien
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriments.Nutriments
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data.NutriScoreData
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneral
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonal
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
 
 @Entity(
     tableName = "OpenFoodFactsResponses",
     foreignKeys = [
         ForeignKey(
-            entity = UserPersonal::class,
+            entity = UserPersonalInformation::class,
             parentColumns = ["name"],
             childColumns = ["userName"],
             onDelete = ForeignKey.CASCADE
