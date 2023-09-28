@@ -1,0 +1,13 @@
+package com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_nutrition_setting_informations
+
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSettingInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserNutritionSettingInformationRepository
+
+class GetUserNutritionSettingInformation(
+    val repository: UserNutritionSettingInformationRepository
+) {
+    suspend operator fun invoke(userPersonalInformation: UserPersonalInformation): UserNutritionSettingInformation {
+        return repository.getUserNutrientInformation(userPersonalInformation)
+    }
+}

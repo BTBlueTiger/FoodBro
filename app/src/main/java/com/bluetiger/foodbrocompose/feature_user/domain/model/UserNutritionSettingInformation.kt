@@ -1,11 +1,12 @@
 package com.bluetiger.foodbrocompose.feature_user.domain.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "UserNutritionSetting",
+    tableName = "user_nutrition_setting",
     foreignKeys = [
         ForeignKey(
             entity = UserPersonalInformation::class,
@@ -15,16 +16,15 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class UserNutritionSetting(
+data class UserNutritionSettingInformation(
     @PrimaryKey
     val userNutritionSettingId: Long = 0,
     val userName: String = "",
     val carb: Float = 55f,
     val fat: Float = 30f,
     val protein: Float = 15f,
+    @ColumnInfo("option_name") val optionName : String = "DGE"
 ) : UserInformation {
-
-    val option : Option = Option.DGE
 
     enum class ValueType(
         val label: String,

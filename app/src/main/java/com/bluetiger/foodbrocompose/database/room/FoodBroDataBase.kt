@@ -12,9 +12,10 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutrime
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.nutriscore_data.NutriScoreDataConverter
 import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product_general.ProductGeneralDataConverter
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserActivityInformationDao
+import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserNutrientSettingInformationDao
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserPersonalInformationDao
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivityInformation
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSetting
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSettingInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
 import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroListDao
 import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
@@ -23,6 +24,7 @@ import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
     entities = [
         UserPersonalInformation::class,
         UserActivityInformation::class,
+        UserNutritionSettingInformation::class,
         OpenFoodFactsData::class,
         FoodBroList::class
     ],
@@ -40,6 +42,7 @@ import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList
 abstract class FoodBroDataBase : RoomDatabase() {
     abstract val userActivityInformationDao: UserActivityInformationDao
     abstract val userPersonalInformationDao: UserPersonalInformationDao
+    abstract val userNutritionSettingInformationDao : UserNutrientSettingInformationDao
     abstract val foodFactsDao: OpenFoodFactsDao
     abstract val foodBroListDao: FoodBroListDao
 

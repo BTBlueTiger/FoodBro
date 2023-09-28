@@ -3,9 +3,11 @@ package com.bluetiger.foodbrocompose.di
 import com.bluetiger.foodbrocompose.database.room.FoodBroDataBase
 import com.bluetiger.foodbrocompose.feature_user.data.repository.UserActivityInformationRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_user.data.repository.UserFlowRepositoryImpl
+import com.bluetiger.foodbrocompose.feature_user.data.repository.UserNutritionSettingInformationRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_user.data.repository.UserPersonalPersonalInformationRepositoryImpl
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserActivityInformationRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserFlowRepository
+import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserNutritionSettingInformationRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.repository.UserPersonalInformationRepository
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_activity_informations.AddUserActivityInformation
@@ -16,6 +18,10 @@ import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_flow_infor
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_flow_informations.NewUser
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_flow_informations.UserFlowUseCases
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_flow_informations.UserIsSet
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_nutrition_setting_informations.AddUserNutritionSettingInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_nutrition_setting_informations.DeleteUserNutritionSettingInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_nutrition_setting_informations.GetUserNutritionSettingInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_nutrition_setting_informations.UserNutritionSettingsUseCases
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal_informations.AddUserPersonalInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal_informations.DeleteUserPersonalInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.user_personal_informations.GetAllLocalUserPersonalInformation
@@ -41,7 +47,7 @@ object UserModule {
         userFlowRepository: UserFlowRepository,
         userPersonalInformationRepository: UserPersonalInformationRepository,
         userActivityInformationRepository: UserActivityInformationRepository
-    )  =
+    ) =
         UserUseCases(
             pendingInformation = provideUserFlowUseCases(userFlowRepository),
             personalInformation = provideUserPersonalUseCases(userPersonalInformationRepository),
@@ -50,15 +56,16 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun provideUserFlowUseCases(repository: UserFlowRepository) : UserFlowUseCases = UserFlowUseCases(
-        currentUser = CurrentUser(repository),
-        newUser = NewUser(repository),
-        userIsSet = UserIsSet(repository)
-    )
+    fun provideUserFlowUseCases(repository: UserFlowRepository): UserFlowUseCases =
+        UserFlowUseCases(
+            currentUser = CurrentUser(repository),
+            newUser = NewUser(repository),
+            userIsSet = UserIsSet(repository)
+        )
 
     @Provides
     @Singleton
-    fun provideUserFlowRepository() : UserFlowRepository = UserFlowRepositoryImpl()
+    fun provideUserFlowRepository(): UserFlowRepository = UserFlowRepositoryImpl()
 
 
     /**
@@ -66,21 +73,22 @@ object UserModule {
      */
     @Provides
     @Singleton
-    fun provideUserPersonalRepository(db: FoodBroDataBase) : UserPersonalInformationRepository {
+    fun provideUserPersonalRepository(db: FoodBroDataBase): UserPersonalInformationRepository {
         return UserPersonalPersonalInformationRepositoryImpl(db.userPersonalInformationDao)
     }
 
     @Provides
     @Singleton
-    fun provideUserPersonalUseCases(repository: UserPersonalInformationRepository) = UserPersonalInformationUseCases(
-        getAllLocalUserPersonalInformation = GetAllLocalUserPersonalInformation(repository),
-        deleteUserPersonalInformation = DeleteUserPersonalInformation(repository),
-        addUserPersonalInformation = AddUserPersonalInformation(repository),
-        getUserPersonalInformation = GetUserPersonalInformation(repository),
-        getPendingNewUserPersonalInformation = GetPendingNewUserPersonalInformation(repository),
-        setPendingNewUserPersonalInformation = SetPendingNewUserPersonalInformation(repository),
-        initPendingNewUserPersonalInformation = InitPendingNewUserPersonalInformation(repository)
-    )
+    fun provideUserPersonalUseCases(repository: UserPersonalInformationRepository) =
+        UserPersonalInformationUseCases(
+            getAllLocalUserPersonalInformation = GetAllLocalUserPersonalInformation(repository),
+            deleteUserPersonalInformation = DeleteUserPersonalInformation(repository),
+            addUserPersonalInformation = AddUserPersonalInformation(repository),
+            getUserPersonalInformation = GetUserPersonalInformation(repository),
+            getPendingNewUserPersonalInformation = GetPendingNewUserPersonalInformation(repository),
+            setPendingNewUserPersonalInformation = SetPendingNewUserPersonalInformation(repository),
+            initPendingNewUserPersonalInformation = InitPendingNewUserPersonalInformation(repository)
+        )
 
 
     /**
@@ -88,15 +96,34 @@ object UserModule {
      */
     @Provides
     @Singleton
-    fun provideUserActivityRepository(db: FoodBroDataBase) : UserActivityInformationRepository {
+    fun provideUserActivityRepository(db: FoodBroDataBase): UserActivityInformationRepository {
         return UserActivityInformationRepositoryImpl(db.userActivityInformationDao)
     }
 
     @Provides
     @Singleton
-    fun provideUserActivityUseCases(repository: UserActivityInformationRepository) = UserActivityInformationUseCases(
-        getUserActivityInformation = GetUserActivityInformation(repository),
-        addUserActivityInformation = AddUserActivityInformation(repository),
-        deleteUserActivityInformation = DeleteUserActivityInformation(repository)
-    )
+    fun provideUserActivityUseCases(repository: UserActivityInformationRepository) =
+        UserActivityInformationUseCases(
+            getUserActivityInformation = GetUserActivityInformation(repository),
+            addUserActivityInformation = AddUserActivityInformation(repository),
+            deleteUserActivityInformation = DeleteUserActivityInformation(repository)
+        )
+
+    /**
+     * UserNutritionInformation
+     */
+    @Provides
+    @Singleton
+    fun provideUserNutritionRepository(db: FoodBroDataBase): UserNutritionSettingInformationRepository {
+        return UserNutritionSettingInformationRepositoryImpl(db.userNutritionSettingInformationDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserNutritionUseCases(repository: UserNutritionSettingInformationRepository) =
+        UserNutritionSettingsUseCases(
+            addUserNutritionSettingInformation = AddUserNutritionSettingInformation(repository),
+            getUserNutritionSettingInformation = GetUserNutritionSettingInformation(repository),
+            deleteUserNutritionSettingInformation = DeleteUserNutritionSettingInformation(repository)
+        )
 }

@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSetting
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSettingInformation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,13 +39,13 @@ fun AddEditUserNutritionSettingsContent(
 
     val selectedOption = viewModel.selectedOption.value
 
-    val carbType = UserNutritionSetting.ValueType.CARB
-    val proteinType = UserNutritionSetting.ValueType.PROTEIN
-    val fatType = UserNutritionSetting.ValueType.FAT
+    val carbType = UserNutritionSettingInformation.ValueType.CARB
+    val proteinType = UserNutritionSettingInformation.ValueType.PROTEIN
+    val fatType = UserNutritionSettingInformation.ValueType.FAT
 
-    val carb = viewModel.macros[UserNutritionSetting.ValueType.CARB]
-    val protein = viewModel.macros[UserNutritionSetting.ValueType.PROTEIN]
-    val fat = viewModel.macros[UserNutritionSetting.ValueType.FAT]
+    val carb = viewModel.macros[UserNutritionSettingInformation.ValueType.CARB]
+    val protein = viewModel.macros[UserNutritionSettingInformation.ValueType.PROTEIN]
+    val fat = viewModel.macros[UserNutritionSettingInformation.ValueType.FAT]
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -79,7 +79,7 @@ fun AddEditUserNutritionSettingsContent(
                     ExposedDropdownMenu(
                         expanded = dropDownMenuState,
                         onDismissRequest = { dropDownMenuState = false }) {
-                        UserNutritionSetting.Option.values().forEach { option ->
+                        UserNutritionSettingInformation.Option.values().forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(text = option.settingsName) },
                                 onClick = {
@@ -103,7 +103,7 @@ fun AddEditUserNutritionSettingsContent(
                 onValueChange = {
                     viewModel.onEvent(
                         AddEditUserNutritionSettingsEvent.MacroValueChanged(
-                            UserNutritionSetting.ValueType.CARB,
+                            UserNutritionSettingInformation.ValueType.CARB,
                             it.toInt()
                         )
                     )
@@ -112,7 +112,7 @@ fun AddEditUserNutritionSettingsContent(
                 onValueChange = {
                     viewModel.onEvent(
                         AddEditUserNutritionSettingsEvent.MacroValueChanged(
-                            UserNutritionSetting.ValueType.FAT,
+                            UserNutritionSettingInformation.ValueType.FAT,
                             it.toInt()
                         )
                     )
@@ -121,7 +121,7 @@ fun AddEditUserNutritionSettingsContent(
                 onValueChange = {
                     viewModel.onEvent(
                         AddEditUserNutritionSettingsEvent.MacroValueChanged(
-                            UserNutritionSetting.ValueType.PROTEIN,
+                            UserNutritionSettingInformation.ValueType.PROTEIN,
                             it.toInt()
                         )
                     )
