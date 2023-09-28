@@ -1,13 +1,30 @@
 package com.bluetiger.foodbrocompose.feature_user.domain.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+@Entity(
+    tableName = "UserNutritionSetting",
+    foreignKeys = [
+        ForeignKey(
+            entity = UserPersonalInformation::class,
+            parentColumns = ["name"],
+            childColumns = ["userName"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class UserNutritionSetting(
-    @PrimaryKey val name: String,
-    val carb: Float,
-    val fat: Float,
-    val protein: Float,
+    @PrimaryKey
+    val userNutritionSettingId: Long = 0,
+    val userName: String = "",
+    val carb: Float = 55f,
+    val fat: Float = 30f,
+    val protein: Float = 15f,
 ) : UserInformation {
+
+    val option : Option = Option.DGE
 
     enum class ValueType(
         val label: String,
@@ -18,7 +35,7 @@ data class UserNutritionSetting(
         PROTEIN("Protein", "protein")
     }
 
-    enum class PreConfigured(
+    enum class Option(
         val settingsName : String,
         val carb: Int,
         val fat: Int,
@@ -29,7 +46,7 @@ data class UserNutritionSetting(
         HIGH_CARB_LOW_FAT("High Carb Low Fat", 80, 10, 10),
         KETO_DIET("Keto", 5, 65, 30),
         PALEO_DIET("Paleo", 25, 40, 35),
-        NONE("", 0, 0,0),
+        Custom("Custom", 0, 0,0),
     }
 
 }

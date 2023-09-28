@@ -14,6 +14,7 @@ import com.bluetiger.foodbrocompose.feature_open_food_facts.domain.model.product
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserActivityInformationDao
 import com.bluetiger.foodbrocompose.feature_user.data.data_source.UserPersonalInformationDao
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivityInformation
+import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSetting
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
 import com.bluetiger.foodbrocompose.feature_user_list.data.data_source.FoodBroListDao
 import com.bluetiger.foodbrocompose.feature_user_list.domain.model.FoodBroList

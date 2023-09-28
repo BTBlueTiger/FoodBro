@@ -57,8 +57,6 @@ private fun ActivitySliderCard(
         onValueChanged(mutableValue)
     }
 
-    Log.e("Value", mutableValue.toString())
-
     Card(
         modifier = Modifier
             .fillMaxWidth()

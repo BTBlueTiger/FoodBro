@@ -8,7 +8,8 @@ class UserMap {
 
     private val map: MutableMap<KClass<out UserInformation>, UserInformation> = mutableStateMapOf(
         Pair(UserPersonalInformation::class, UserPersonalInformation()),
-        Pair(UserActivityInformation::class, UserActivityInformation())
+        Pair(UserActivityInformation::class, UserActivityInformation()),
+        Pair(UserNutritionSetting::class, UserNutritionSetting())
     )
 
     operator fun <T : UserInformation> get(userInformation: KClass<T>): UserInformation {
