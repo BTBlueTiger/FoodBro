@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivityInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
+import com.bluetiger.foodbrocompose.ui.common.components.slider.SliderStateColors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -82,6 +83,27 @@ class AddEditUserActivityViewModel @Inject constructor(
             )
         }
     }
+
+    fun getSliderColor(): SliderStateColors {
+        val sum = activityInformation.values.sum().toInt()
+        val maxvalue = 24 * 60
+        return when {
+            sum == maxvalue -> {
+                SliderStateColors.VALID
+            }
+            sum > maxvalue -> {
+                SliderStateColors.ERROR
+            }
+            sum < maxvalue -> {
+                SliderStateColors.PENDING
+            }
+            else -> {
+                SliderStateColors.DEFAULT
+            }
+        }
+    }
+
+    fun getTimeDifference() = (24f * 60) - activityInformation.values.sum()
 
     private fun updatePendingMap(userActivityInformation: UserActivityInformation) {
         pendingMap[UserActivityInformation::class] = userActivityInformation

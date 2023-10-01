@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.bluetiger.foodbrocompose.R
 
 @Entity(
     tableName = "user_nutrition_setting",
@@ -28,11 +29,12 @@ data class UserNutritionSettingInformation(
 
     enum class ValueType(
         val label: String,
-        val memberParam: String
+        val memberParam: String,
+        val symbolIcon: Int
     ) {
-        CARB("Carb", "carb"),
-        FAT("Fat", "fat"),
-        PROTEIN("Protein", "protein")
+        CARB("Carb", "carb", R.drawable.bread),
+        FAT("Fat", "fat", R.drawable.butter),
+        PROTEIN("Protein", "protein", R.drawable.meat)
     }
 
     enum class Option(

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivityInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserNutritionSettingInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.use_case.UserUseCases
+import com.bluetiger.foodbrocompose.ui.common.components.slider.SliderStateColors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -76,5 +77,26 @@ class AddEditUserNutritionSettingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getDifference() = 100f - macros.values.sum()
+
+    fun getSliderColor(): SliderStateColors {
+        val sum = macros.values.sum()
+        return when {
+            sum == 100 -> {
+                SliderStateColors.VALID
+            }
+            sum > 100 -> {
+                SliderStateColors.ERROR
+            }
+            sum < 100 -> {
+                SliderStateColors.PENDING
+            }
+            else -> {
+                SliderStateColors.DEFAULT
+            }
+        }
+    }
+
 
 }
