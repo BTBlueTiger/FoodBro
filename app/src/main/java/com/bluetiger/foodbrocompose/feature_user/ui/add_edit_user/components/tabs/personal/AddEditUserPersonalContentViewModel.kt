@@ -76,6 +76,15 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                 pendingMap[UserPersonalInformation::class] = newUserPersonal
                 Log.i(TAG, newUserPersonal.toString())
                 userUseCases.pendingInformation.newUser.setValue(pendingMap)
+                if(personalInformation.values.none { it.isError } && personalInformation.values.all { it.isValid }){
+                    userUseCases.pendingInformation.newUser.setPersonalInformationIsSet(true)
+                } else {
+                    personalInformation.filter { !it.value.isValid }.forEach {
+                        Log.e("Tag", it.key.label)
+                    }
+
+                    userUseCases.pendingInformation.newUser.setPersonalInformationIsSet(false)
+                }
             }
         }
     }
@@ -97,6 +106,7 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                         value = value,
                         isError = false,
                         supportingText = null,
+                        isValid = true,
                         colorCase = OutlineTextFieldColorCases.VALID
                     )
                 }
@@ -120,6 +130,7 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                         value = value,
                         isError = false,
                         supportingText = null,
+                        isValid = true,
                         colorCase = OutlineTextFieldColorCases.VALID
                     )
                 }
@@ -144,6 +155,7 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                         value = value,
                         isError = false,
                         supportingText = null,
+                        isValid = true,
                         colorCase = OutlineTextFieldColorCases.VALID
                     )
                 }
@@ -158,7 +170,8 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                 } else {
                     this[valueType]!!.copy(
                         value = value,
-                        isError = false
+                        isError = false,
+                        isValid = true
                     )
                 }
             }
@@ -176,6 +189,7 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
                         value = value,
                         isError = false,
                         supportingText = null,
+                        isValid = true,
                         colorCase = OutlineTextFieldColorCases.VALID
                     )
                 }

@@ -31,18 +31,12 @@ fun AddEditUserScreenActivity(
     viewModel: AddEditUserScreenViewModel = hiltViewModel()
 ) {
 
-    viewModel.onEvent(AddEditUserEvent.InitNewUser)
-
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    var selectedTab by remember { mutableIntStateOf(0) }
+    val selectedTab = viewModel.selectedTab.value
 
-    val tabs = listOf(
-        AddEditUserTab.PersonalInformation,
-        AddEditUserTab.ActivityInformation,
-        AddEditUserTab.FoodNutritionSettings
-    )
+    val tabs = viewModel.availableTabs
 
     Scaffold(
         modifier = Modifier
@@ -52,12 +46,19 @@ fun AddEditUserScreenActivity(
             FloatingActionButton(
                 onClick = {
                     scope.launch {
-
+                        if(selectedTab !=2) {
+                            viewModel.onEvent(AddEditUserEvent.ChangeTab(selectedTab + 1))
+                        } else {
+                            viewModel.onEvent(AddEditUserEvent.SaveUser)
+                        }
                     }
                 },
             ) {
-                Icon(
+                if(selectedTab != 2) Icon(
                     painterResource(id = R.drawable.baseline_arrow_circle_right_24),
+                    contentDescription = ""
+                ) else Icon(
+                    painterResource(id = R.drawable.baseline_check_circle_24),
                     contentDescription = ""
                 )
             }
@@ -69,7 +70,7 @@ fun AddEditUserScreenActivity(
                     Tab(
                         selected = selectedTab == index,
                         onClick = {
-                            selectedTab = index
+                            viewModel.onEvent(AddEditUserEvent.ChangeTab(index))
                         },
                         text = { Text(tab.titleName) },
                         icon = {

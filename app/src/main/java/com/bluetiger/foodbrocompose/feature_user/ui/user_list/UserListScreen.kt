@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,25 +40,28 @@ fun UserListScreen(
 ) {
 
     val users by viewModel.getUsers().collectAsState(initial = emptyList())
+    Log.e("User", users.toString())
+    LazyColumn{
+        items(users){
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Card(
+                    modifier = Modifier
+                        .padding(10.dp),
+                    onClick = {
 
-    users.forEach {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Card(
-                modifier = Modifier
-                    .padding(10.dp),
-                onClick = {
-
-                    viewModel.onEvent(UserListEvents.SetUser(it))
-                    navigateToHome()
-                },
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-                shape = CardDefaults.elevatedShape,
-                elevation = CardDefaults.cardElevation(),
-            ) {
-                Spacer(modifier = Modifier.height(5.dp))
-                HeadLine(headline = it.name)
-                Spacer(modifier = Modifier.height(10.dp))
+                        viewModel.onEvent(UserListEvents.SetUser(it))
+                        navigateToHome()
+                    },
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                    shape = CardDefaults.elevatedShape,
+                    elevation = CardDefaults.cardElevation(),
+                ) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    HeadLine(headline = it.name)
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
             }
         }
     }
+
 }

@@ -46,12 +46,14 @@ object UserModule {
     fun provideUserUseCases(
         userFlowRepository: UserFlowRepository,
         userPersonalInformationRepository: UserPersonalInformationRepository,
-        userActivityInformationRepository: UserActivityInformationRepository
+        userActivityInformationRepository: UserActivityInformationRepository,
+        userNutritionSettingsRepository: UserNutritionSettingInformationRepository
     ) =
         UserUseCases(
             pendingInformation = provideUserFlowUseCases(userFlowRepository),
             personalInformation = provideUserPersonalUseCases(userPersonalInformationRepository),
-            activityInformation = provideUserActivityUseCases(userActivityInformationRepository)
+            activityInformation = provideUserActivityUseCases(userActivityInformationRepository),
+            nutritionSettingInformation = provideUserNutritionUseCases(userNutritionSettingsRepository)
         )
 
     @Provides

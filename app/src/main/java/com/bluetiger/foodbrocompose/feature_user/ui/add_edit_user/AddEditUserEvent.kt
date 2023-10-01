@@ -6,6 +6,6 @@ import kotlin.reflect.KClass
 sealed class AddEditUserEvent {
     object SaveUser : AddEditUserEvent()
 
-    object InitNewUser : AddEditUserEvent()
+    data class ChangeTab(val tabIndex: Int) : AddEditUserEvent()
 
 }

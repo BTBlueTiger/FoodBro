@@ -7,6 +7,6 @@ class AddUserActivityInformation(
     private val repository: UserActivityInformationRepository
 ) {
     suspend operator fun invoke(userActivityInformation: UserActivityInformation){
-        repository.deleteUserActivity(userActivityInformation)
+        repository.insertActivityLevel(userActivityInformation)
     }
 }
