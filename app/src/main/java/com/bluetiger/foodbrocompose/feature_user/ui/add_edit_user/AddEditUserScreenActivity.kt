@@ -69,7 +69,7 @@ fun AddEditUserScreenActivity(
                     Tab(
                         selected = selectedTab == index,
                         onClick = {
-                                  selectedTab = index
+                            selectedTab = index
                         },
                         text = { Text(tab.titleName) },
                         icon = {

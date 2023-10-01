@@ -49,7 +49,6 @@ fun AddEditUserPersonalTabRow(
 ) {
     val personalInformationMap = viewModel.personalInformation.toMap()
 
-    viewModel.onEvent(AddEditUserPersonalContentEvent.OnChangeTab)
 
     Box(
         modifier = Modifier,

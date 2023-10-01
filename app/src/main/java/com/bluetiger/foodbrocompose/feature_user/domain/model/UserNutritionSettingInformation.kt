@@ -20,9 +20,9 @@ data class UserNutritionSettingInformation(
     @PrimaryKey
     val userNutritionSettingId: Long = 0,
     val userName: String = "",
-    val carb: Float = 55f,
-    val fat: Float = 30f,
-    val protein: Float = 15f,
+    val carb: Int = 55,
+    val fat: Int = 30,
+    val protein: Int = 15,
     @ColumnInfo("option_name") val optionName : String = "DGE"
 ) : UserInformation {
 
@@ -48,5 +48,12 @@ data class UserNutritionSettingInformation(
         PALEO_DIET("Paleo", 25, 40, 35),
         Custom("Custom", 0, 0,0),
     }
+
+    operator fun iterator(): Iterator<Pair<ValueType, Int>> =
+        listOf(
+            Pair(ValueType.CARB, carb),
+            Pair(ValueType.FAT, fat),
+            Pair(ValueType.PROTEIN, protein)
+        ).iterator()
 
 }

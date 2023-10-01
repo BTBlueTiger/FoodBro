@@ -31,13 +31,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun AddEditUserActivityTabRow(
     viewModel: AddEditUserActivityViewModel = hiltViewModel()
 ) {
-    val userActivityTypeList = listOf(
-        ActivitySettingsType.PreConfigured,
-        ActivitySettingsType.Customized,
-        ActivitySettingsType.HealthConnect
-    )
+
+    val userOptionList = viewModel.userOptionList
     var dropDownMenuState by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(userActivityTypeList[0]) }
+    val selectedOption = viewModel.selectedOptionState.value
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -70,11 +67,11 @@ fun AddEditUserActivityTabRow(
                     ExposedDropdownMenu(
                         expanded = dropDownMenuState,
                         onDismissRequest = { dropDownMenuState = false }) {
-                        userActivityTypeList.forEach { activityType ->
+                        userOptionList.forEach { option ->
                             DropdownMenuItem(
-                                text = { Text(text = activityType.shortTerm) },
+                                text = { Text(text = option.shortTerm) },
                                 onClick = {
-                                    selectedOption = activityType
+                                    viewModel.onEvent(AddEditUserActivityEvent.SelectedOptionChanged(option))
                                     dropDownMenuState = false
                                 },
                                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,

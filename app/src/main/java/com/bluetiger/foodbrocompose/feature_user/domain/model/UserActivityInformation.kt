@@ -24,15 +24,22 @@ data class UserActivityInformation(
     @ColumnInfo(name = "sleep") val sleep: Float = 0f,
     @ColumnInfo(name = "lightly_active") val lightlyActive: Float = 0f,
     @ColumnInfo(name = "moderately_active") val moderatelyActive: Float = 0f,
-    @ColumnInfo(name = "active") val active: Float = 0f,
+    @ColumnInfo(name = "active") var active: Float = 0f,
     @ColumnInfo(name = "very_active") val veryActive: Float = 0f,
     @ColumnInfo(name = "hard_active") val hardActive: Float = 0f,
     @ColumnInfo(name = "pal") val pal: Float = 0f,
-    @ColumnInfo(name = "pre_configured") val preConfigured: String = ""
+    @ColumnInfo(name = "pre_configured") val preConfigured: String = "Sleep"
 ) : UserInformation {
 
-    operator fun iterator(): Iterator<Float> {
-        return listOf(sleep, lightlyActive, moderatelyActive, active, veryActive, hardActive).iterator()
+    operator fun iterator(): Iterator<Pair<ValueType, Float>> {
+        return listOf(
+            Pair(ValueType.SLEEP, sleep),
+            Pair(ValueType.LIGHTLY_ACTIVE,lightlyActive),
+            Pair(ValueType.MODERATELY_ACTIVE, moderatelyActive),
+            Pair(ValueType.ACTIVE, active),
+            Pair(ValueType.VERY_ACTIVE, veryActive),
+            Pair(ValueType.HARD_ACTIVE, hardActive))
+            .iterator()
     }
 
     enum class ValueType(
@@ -96,7 +103,7 @@ data class UserActivityInformation(
             R.drawable.craftsmen
         ),
         HARD_ACTIVE(
-            "hard_active",
+            "hardActive",
             "Hard Active",
             "Hard exhaustive Work",
             2.0f,

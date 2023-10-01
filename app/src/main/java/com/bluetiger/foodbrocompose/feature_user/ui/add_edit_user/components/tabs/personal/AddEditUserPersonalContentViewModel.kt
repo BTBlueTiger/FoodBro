@@ -1,5 +1,6 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.personal
 
+import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.toMutableStateMap
@@ -20,10 +21,13 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val pendingMap by lazy { userUseCases.pendingInformation.newUser.getValue() }
-    private val newUserPersonal by lazy { pendingMap[UserPersonalInformation::class] as UserPersonalInformation }
+    private val TAG = this::class.toString()
 
-    private val TAG = "AddEditUser"
+    private val pendingMap by lazy { userUseCases.pendingInformation.newUser.getValue() }
+    private var newUserPersonal =
+        pendingMap[UserPersonalInformation::class] as UserPersonalInformation
+
+
 
     private val _personalInformation =
         UserPersonalInformation.ValueType.values().map {
@@ -34,33 +38,44 @@ class AddEditUserPersonalContentViewModel @Inject constructor(
         _personalInformation
 
 
-    init {
-        if (pendingMap.isPending) {
-            val iterator = newUserPersonal.iterator()
-            UserPersonalInformation.ValueType.values().forEach {
-                personalInformation.copy(it, iterator.next())
+    private fun <T> UserPersonalInformation.ValueType.isNotEmpty(value: T) : Boolean{
+        when(this.dataType){
+            String::class -> {
+                return value != ""
+            }
+            Long::class -> {
+                return value as Long != 0L
+            }
+            Int::class -> {
+                return value as Int != 0
             }
         }
+        return false
     }
 
+    init {
+        if (pendingMap.isPending) {
+            newUserPersonal.iterator().forEach {
+                if(it.first.isNotEmpty(it.second)){
+                    personalInformation.copy(it.first, it.second)
+                }
+            }
+            Log.i(TAG, "Saved PersonalInformation= $personalInformation")
+        }
+    }
 
     fun onEvent(event: AddEditUserPersonalContentEvent) {
         when (event) {
             is AddEditUserPersonalContentEvent.EnteredValue<*> -> {
-
-                personalInformation.copy(event.enteredValueType, event.value)
                 userUseCases.pendingInformation.newUser.getValue().isPending = true
 
-                pendingMap[UserPersonalInformation::class] =
-                    newUserPersonal.customCopy(
-                        event.enteredValueType.memberParam,
-                        event.value
-                    ) as UserPersonalInformation
+                personalInformation.copy(event.enteredValueType, event.value)
+                newUserPersonal = newUserPersonal.customCopy(
+                    event.enteredValueType.memberParam, event.value
+                ) as UserPersonalInformation
+                pendingMap[UserPersonalInformation::class] = newUserPersonal
+                Log.i(TAG, newUserPersonal.toString())
                 userUseCases.pendingInformation.newUser.setValue(pendingMap)
-            }
-
-            is AddEditUserPersonalContentEvent.OnChangeTab -> {
-
             }
         }
     }

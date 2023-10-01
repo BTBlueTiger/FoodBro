@@ -7,7 +7,4 @@ sealed class AddEditUserPersonalContentEvent {
         val value: T,
         val enteredValueType: UserPersonalInformation.ValueType
     ) : AddEditUserPersonalContentEvent()
-
-    object OnChangeTab : AddEditUserPersonalContentEvent()
-
 }

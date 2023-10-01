@@ -1,11 +1,17 @@
 package com.bluetiger.foodbrocompose.feature_user.ui.add_edit_user.components.tabs.activity.customized
 
 import android.util.Log
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,9 +44,10 @@ import kotlin.math.floor
 @Composable
 private fun ActivitySliderCard(
     activity: UserActivityInformation.ValueType,
-    onValueChanged: (Float) -> Unit
+    value: Float,
+    onValueChangedFinished : (Float) -> Unit
 ) {
-    var mutableValue by remember { mutableFloatStateOf(0f) }
+    var mutableValue by remember { mutableFloatStateOf(value) }
     var mutableHours by remember { mutableIntStateOf(0) }
     var mutableMinutes by remember { mutableIntStateOf(0) }
 
@@ -54,7 +62,7 @@ private fun ActivitySliderCard(
 
     LaunchedEffect(key1 = mutableHours, key2 = mutableHours) {
         mutableValue = 60f * mutableHours + mutableMinutes
-        onValueChanged(mutableValue)
+
     }
 
     Card(
@@ -63,7 +71,7 @@ private fun ActivitySliderCard(
             .padding(4.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(6.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -72,6 +80,9 @@ private fun ActivitySliderCard(
 
                 Text(text = activity.shortTerm, modifier = Modifier.weight(1f))
 
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row {
                 OutlinedTextField(
                     value = mutableHours.toString(),
                     onValueChange = {
@@ -96,23 +107,23 @@ private fun ActivitySliderCard(
                     label = { Text(text = "Minutes") },
                     modifier = Modifier.weight(1f)
                 )
-                Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = null,
-                    modifier = Modifier.weight(0.4f)
-                )
             }
-
-            // Slider in the middle
-            Slider(
-                value = mutableValue,
-                valueRange = 0f..24f * 60,
-                onValueChange = { mutableValue = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )
         }
+        Slider(
+            value = mutableValue,
+            valueRange = 0f..24f * 60,
+            onValueChange = { mutableValue = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp)
+                .pointerInput(Unit) {
+                    detectDragGestures { _, dragAmount ->
+                        mutableValue += dragAmount.x / /* your sensitivity factor */ 10
+                    }
+                },
+            steps = 24,
+            onValueChangeFinished = { onValueChangedFinished(mutableValue) }
+        )
     }
 }
 
@@ -122,14 +133,16 @@ fun CustomizedActivityValuesSheet(
 ) {
     val items = UserActivityInformation.ValueType.values().toList()
     Column {
-        LazyVerticalGrid(GridCells.Fixed(1), contentPadding = PaddingValues(16.dp)) {
+        LazyVerticalGrid(GridCells.Fixed(2), contentPadding = PaddingValues(8.dp)) {
             items(items) { activity ->
-                ActivitySliderCard(activity = activity) {
+                ActivitySliderCard(
+                    activity = activity,
+                    value = viewModel.activityInformation[activity]!!
+                ) {
                     viewModel.onEvent(
-                        AddEditUserActivityEvent.ActivityValueChanged(
+                        AddEditUserActivityEvent.CustomActivityValueChanged(
                             activity,
-                            it,
-                            ActivitySettingsType.Customized
+                            it
                         )
                     )
                 }

@@ -1,16 +1,8 @@
 package com.bluetiger.foodbrocompose.feature_user.domain.repository
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bluetiger.foodbrocompose.common.FoodBroRepository
-import com.bluetiger.foodbrocompose.feature_user.data.repository.UserFlowRepositoryImpl
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserActivityInformation
 import com.bluetiger.foodbrocompose.feature_user.domain.model.UserMap
-import com.bluetiger.foodbrocompose.feature_user.domain.model.UserPersonalInformation
-import java.util.concurrent.Flow
 
 abstract class UserFlowRepository {
 

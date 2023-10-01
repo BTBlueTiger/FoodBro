@@ -22,8 +22,15 @@ data class UserPersonalInformation(
         GENDER("Gender" ,Gender::class,  "gender");
     }
 
-    operator fun iterator(): Iterator<Any> {
-        return listOf(name, height, weight, birthday, gender).iterator()
+
+
+    operator fun iterator(): Iterator<Pair<ValueType, Any>> {
+        return listOf(
+            Pair(ValueType.NAME, name),
+            Pair(ValueType.HEIGHT, height),
+            Pair(ValueType.WEIGHT, weight),
+            Pair(ValueType.BIRTHDAY, birthday),
+            Pair(ValueType.GENDER, gender)).iterator()
     }
 
     companion object {

@@ -113,10 +113,8 @@ fun PreConfiguredActivityValuesSheet(
             items(items) { activity ->
                 ActivityCard(activity = activity, selected = selected == activity, onClick = {
                     viewModel.onEvent(
-                        AddEditUserActivityEvent.ActivityValueChanged(
-                            it,
-                            it.meanPalFactor,
-                            ActivitySettingsType.PreConfigured
+                        AddEditUserActivityEvent.PreconfiguredActivityValueChanged(
+                            it
                         )
                     )
                     selected = it
